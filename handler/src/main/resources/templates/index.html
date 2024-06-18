@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="/css/index-style.css">
+        <script src="/js/index-script.js"></script>
+        <meta charset="UTF-8">
+        <title>Favorite Airline Survey</title>
+    </head>
+    <body>
+        <div id="title-and-descrip">
+            <h1 id="title">Favorite Airline Survey</h1>
+            <p id="description">Please fill out the below information with the required information</p>
+        </div>
+        <div id="container" >
+            <form id="form">
+                <div id="personal-info" class="section">
+                    <fieldset>
+                        <label for="name-label" class="personal-label">
+                            Full Name<input type="text" id="name" name="name" pattern="^[A-Z][a-zA-Z]{2,}(?: [A-Z][a-zA-Z]*){0,2}$" placeholder="Chuck Yeager" required>
+                        </label>
+                        <label for="email-label" class="personal-label">
+                            Email<input type="email" id="email" name="email" pattern="{3,}" placeholder="cyeager1947@gmail.com" required>
+                        </label>
+                        <label for="number-label" class="personal-label">
+                            Age<input type="number" id="number" name="age" placeholder="18" min="13" max="120" required>
+                        </label>
+                    </fieldset>
+                </div>
+                <div id="manufacturer" class="section">
+                    <fieldset>
+                        <legend>Airbus or Boeing?</legend>
+                        <label for="airbus" class="manufacturer">
+                            <input type="radio" id="airbus" name="manufacturer" value="airbus" required> Airbus
+                        </label>
+                        <label for="boeing" class="manufacturer">
+                            <input type="radio" id="boeing" name="manufacturer" value="boeing" required> Boeing
+                        </label>
+                    </fieldset>
+                </div>
+                <div id="plane" class="section">
+                    <fieldset>
+                        <legend>Favorite Airline</legend>
+                                <label for="dropdown">
+                                    <select id="dropdown" name="dropdown" required>
+                                        <option value="none" selected disabled hidden>(select one)</option>
+                                        <option value="A220">A220</option>
+                                        <option value="A320">A320</option>
+                                        <option value="A321">A321</option>
+                                        <option value="A330">A330</option>
+                                        <option value="A340">A340</option>
+                                        <option value="A350">A350</option>
+                                        <option value="A380">A380</option>
+                                        <option value="B737">B737</option>
+                                        <option value="B747">B747</option>
+                                        <option value="B757">B757</option>
+                                        <option value="B767">B767</option>
+                                        <option value="B777">B777</option>
+                                        <option value="B787">B787</option>
+                                    </select>
+                                </label>
+                    </fieldset>
+                </div>
+                <div id="airlines" class="section">
+                    <fieldset>
+                        <legend>Best US Airlines</legend>
+                        <label for="american" class="airline-label">
+                            <input type="checkbox" id="american" name="favAirlines" value="american" class="airline"> American Airlines
+                        </label>
+                        <label for="united" class="airline-label">
+                            <input type="checkbox" id="united" name="favAirlines" value="united" class="airline"> United Airlines
+                        </label>
+                        <label for="delta" class="airline-label">
+                            <input type="checkbox" id="delta" name="favAirlines" value="delta" class="airline"> Delta Airlines
+                        </label>
+                        <label for="frontier" class="airline-label">
+                            <input type="checkbox" id="frontier" name="favAirlines" value="frontier" class="airline"> Frontier Airlines
+                        </label>
+                        <label for="spirit" class="airline-label">
+                            <input type="checkbox" id="spirit" name="favAirlines" value="frontier" class="airline"> Spirit Airlines
+                        </label>
+                        <label for="alaska" class="airline-label">
+                            <input type="checkbox" id="alaska" name="favAirlines" value="alaska" class="airline"> Alaska Air
+                        </label>
+                        <label for="southwest" class="airline-label">
+                            <input type="checkbox" id="southwest" name="favAirlines" value="southwest" class="airline"> Southwest Airlines
+                        </label>
+                        <label for="jetblue" class="airline-label">
+                            <input type="checkbox" id="jetblue" name="favAirlines" value="jetblue" class="airline"> Jetblue Airlines
+                        </label>
+                    </fieldset>                
+                </div>
+                <div id="experience" class="section">
+                    <fieldset>
+                        <legend>Tell us about your experience with planes!</legend>
+                            <textarea name="experience" id="experience" required></textarea>
+                    </fieldset>
+                </div>
+                <div id="submit-div">
+                    <label for="submit" id="submit-label">
+                        <input type="submit" id="submit" name="submit">
+                    </label>
+                </div>
+            </form>
+        </div>
+    </body>
+    <footer>
+        <p id="thanks">Thanks for your response!</p>
+    </footer>
+</html>

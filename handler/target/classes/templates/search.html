@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Search Responses</title>
+        <link rel="stylesheet" href="/css/search-style.css">
+        <script src="/js/search-script.js"></script>
+        <script src="https://kit.fontawesome.com/c021aee225.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div id="title-descrip">
+            <h1>Favorite Airline Survey Responses</h1>
+            <p>Type in the search bar to search for responses</p>
+        </div>
+        <div id="container">
+            <div id="searchbar-container">
+                <div id="searchbar">
+                    <div id="search-container">
+                        <div id="search-icon"><i class="fa-solid fa-magnifying-glass" style="color: #858681"></i></div>
+                        <input type="text" id="search" placeholder="search for a response" maxlength="80">
+                    </div>
+                    <div class="vert-bar"></div>
+                    <div id="sortby-container" class="dropdown"></div>
+                    <div class="vert-bar"></div>
+                    <div id="order-container" class="dropdown">
+                        <button value="up" id="up" class="option" selected="selected"><i class="fa-solid fa-arrow-up fa-xl" style="color: #858681"></i></button>
+                        <button value="down" id="down" class="option inactive"><i class="fa-solid fa-arrow-down fa-xl" style="color: #858681"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div id="results-container">
+                <div id="no-results">
+                    <div>
+                        <i class="fa-regular fa-face-frown fa-xl"></i>
+                        <p>no results found</p>
+                    </div>
+                </div>
+                <div id="loading" class="inactive">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+            <div id="page-nav">
+                <button type="button" id="prev" class="page-arrow"><i class="fa-solid fa-arrow-left fa-2xl" style="color: #F7F3EC"></i></button>
+                <div id="pages"></div>
+                <button type="button" id="next" class="page-arrow"><i class="fa-solid fa-arrow-right fa-2xl" style="color: #F7F3EC"></i></button>
+            </div>
+        </div>
+    </body>
+</html>

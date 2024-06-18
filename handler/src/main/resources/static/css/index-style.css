@@ -1,0 +1,182 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 100%;
+    height: 100dvh;  
+    font-size: 16px;
+    background-color: #603A44;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #F7F3EC;
+}
+
+#title-and-descrip {
+    display: block;
+    max-width: fit-content;
+    margin-inline: auto;
+    text-align: center;
+    padding-top: 1rem;
+}
+
+#description {
+    padding-top: 0.5rem;
+}
+
+label {
+    display: block;
+    padding-left: 1rem;
+}
+
+#name, #email, #number, #textarea {
+    display: block;
+    margin-top: 0.5em;
+    font-size: small;
+    background-color: #F7F3EC;
+}
+
+#name, #email {
+    width: 50%;
+}
+
+.personal-label:first-of-type {
+    padding-top: 0.5em;
+}
+
+.personal-label {
+    padding-bottom: 0.5em;
+    font-weight: bold;
+}
+
+#container {
+    max-width: 60%;
+    margin: 1em auto;
+    padding-top: 1rem;
+    background-color: #F7F3EC;
+    border-style: solid;
+    border-radius: 1em;
+    border-color: #F7F3EC;
+}
+
+legend {
+    margin-left: 1em;
+    margin-bottom: 0.5em;
+    width: 100%;
+    float: left;
+    font-weight: bold;
+    padding-top: 0.5em;
+}
+
+form {
+    margin: 0 auto;
+    max-width: 90%;
+    color: #603A44;
+}
+
+.section {
+    padding-top: 1.5em;
+}
+
+fieldset {
+    background-color: #E87569;
+    padding-bottom: 1em;
+    border-style: solid;
+    border-color: #E87569;
+    border-radius: 1em;
+    display: block;
+}
+
+.airline-label, .manufacturer {
+    padding-bottom: 0.3em;
+}
+
+input[type="checkbox"], input[type="radio"] {
+    vertical-align: middle;
+    position: relative;
+    bottom: 0.2em;
+    background-color: #F7F3EC;
+}
+
+#dropdown {
+    appearance: none;
+    font-size: small;
+    background-color: #F7F3EC;
+    background-image: url("data:image/svg+xml,<svg width='24' height='24' xmlns='http://www.w3.org/2000/svg'><path d='m0,6l12,12l12,-12l-24,0z'/><path fill='none' d='m0,0l24,0l0,24l-24,0l0,-24z'/></svg>");
+    background-repeat: no-repeat;
+    background-size: 10%;
+    background-position-x: 95%;
+    background-position-y: 55%;
+    color: #603A44;
+    padding: 5px 15px 5px 5px;
+    border-style: solid;
+    border-color: #F7F3EC;
+}
+
+#name, #email, #number, textarea {
+    padding: 5px;
+    border-radius: 0.5em;
+    border-style: solid;
+    border-color: #F7F3EC;
+}
+
+textarea {
+    font-size: small;
+    margin-left: 1em;
+    width: 50%;
+    resize: vertical;
+    min-height: 2rem;
+    max-height: 100px;
+}
+
+#submit-div {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+
+#submit-label {
+    min-width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#submit {
+    width: 100%;
+    min-height: 3em;
+    background-color: #858681;
+    border: none;
+    color: white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 12px;
+    border-style: solid;
+    border-radius: 1em;
+    border-color: #858681;
+}
+
+#submit:hover {
+    cursor: pointer;
+}
+
+input:hover, select:hover, textarea:hover{
+    filter: brightness(110%);
+}
+
+input[type="radio"]:active, input[type="checkbox"]:active, #submit:active{
+    filter: brightness(80%);
+}
+
+input[type="radio"]:hover, input[type="checkbox"]:hover, select {
+    cursor: pointer;
+}
+
+footer {
+    text-align: center;
+    font-style: italic;
+    padding-bottom: 2em;
+}
