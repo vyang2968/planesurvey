@@ -21,7 +21,7 @@ Security is another big aspect that needs to be included in this website. Curren
 Test cases also need to be written
 
 ## access
-To access this website, navigate to [link planesurvey.live](https://planesurvey.live).
+To access this website, navigate to [planesurvey.live](https://planesurvey.live).
 
 ## license
 This project is uses the Apache 2.0 License.
