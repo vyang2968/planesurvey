@@ -3,6 +3,8 @@ name: Format code on push
 on:
   push:
 
+permissions: write-all
+
 jobs:
   formatting:
     runs-on: ubuntu-latest
