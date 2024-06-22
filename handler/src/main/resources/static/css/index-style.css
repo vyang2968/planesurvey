@@ -50,11 +50,10 @@ label {
 }
 
 #container {
-    max-width: 60%;
+    width: 60%;
     margin: 1em auto;
     padding-top: 1rem;
     background-color: #F7F3EC;
-    border-style: solid;
     border-radius: 1em;
     border-color: #F7F3EC;
 }

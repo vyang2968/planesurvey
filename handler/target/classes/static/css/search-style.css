@@ -39,7 +39,7 @@ h1 {
 #searchbar-container {
     width: 90%;
     margin: 0 auto;
-    margin-top: 40px;
+    margin-top: 5vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -47,7 +47,7 @@ h1 {
 }
 
 #search-container {
-    width: 75%;
+    width: 90%;
     display: flex;
     align-items: center;
 }
@@ -67,7 +67,7 @@ h1 {
 }
 
 #searchbar {
-    width: 90%;
+    width: 96%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -83,7 +83,7 @@ h1 {
     border: 0.25em solid #F7F3EC;
     padding-left: 0.5em;
     box-sizing: border-box;
-    border-radius: 0.5em 0 0 0.5em;
+    border-radius: 0.5rem 0 0 0.5rem;
 }
 
 input[type="text"], .dropdown {
@@ -249,7 +249,7 @@ input[type="text"] {
 }
 
 .result:first-of-type {
-    padding-top: 1.25vh;
+    padding-top: 1.5vh;
 }
 
 .result:last-of-type {
@@ -270,7 +270,7 @@ span {
 #page-nav {
     width: 80%;
     margin: 0 auto;
-    margin-bottom: 1.5em;
+    margin-bottom: 4vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -283,7 +283,7 @@ span {
     justify-content: space-evenly;
 }
 
-#pages > button {
+#pages > button, #pages > span {
     appearance: none;
     border-style: none;;
     width: 2dvw;
@@ -293,6 +293,11 @@ span {
     font-size: 1rem;
     text-align: center;
 }
+
+#pages > span {
+    font-weight: normal;
+}
+
 
 #pages > button:hover {
     cursor: pointer;
@@ -316,6 +321,10 @@ span {
 
 .page-arrow:active {
     filter: brightness(90%);
+}
+
+.active-page {
+    font-weight: 800;
 }
 
 

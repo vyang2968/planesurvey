@@ -266,28 +266,40 @@ function createPageNums() {
     let numPages = (results != null) ? Math.ceil(results.length / 3) : 0;
     let pages = document.getElementById("pages");
 
+    currentPageNum = 1;
 
     if (numPages >= 5) {
         let pageIcons = [];
 
         pageIcons.push("1");
         pageIcons.push("2");
+        pageIcons.push("3");
         pageIcons.push("...");
-        pageIcons.push(numPages - 1);
         pageIcons.push(numPages);
 
         for (let i = 0; i < pageIcons.length; i++) {
-            let pageElement = document.createElement("button");
-            pageElement.innerHTML = pageIcons[i];
-            pages.appendChild(pageElement);
+            let newElement;
 
-            pageElement.addEventListener("click", () => {
-                let page = pageElement.innerHTML;
-                
-                if (page != "...") {
-                    getPage(Number(page));
+            if (pageIcons[i] === "...") {
+                newElement = document.createElement("span");
+
+                newElement.innerHTML = pageIcons[i];
+            } else {
+                newElement = document.createElement("button");
+
+                newElement.innerHTML = pageIcons[i];
+                newElement.id = "page-" + pageIcons[i];
+
+                if (Number(pageIcons[i]) === currentPageNum) {
+                    newElement.classList.add("active-page");
                 }
-            })
+
+                newElement.onclick = () => {
+                    replacePage(Number(pageIcons[i]));
+                }
+            }
+
+            pages.appendChild(newElement)
         }
     } else {
         for (let i = 0; i < numPages; i++) {
@@ -298,24 +310,72 @@ function createPageNums() {
     }
 }
 
-function getPage(pageNum) { 
+function replacePage(pageNum) { 
+    let oldActiveButton = document.getElementsByClassName("active-page");
+    oldActiveButton[0].classList.remove("active-page");
+
+    updatePageNums((pageNum > currentPageNum));
+    
+    let newActiveButton = document.getElementById("page-" + pageNum);
+    newActiveButton.classList.add("active-page");
+
     let container = document.getElementById("results-container");
     container.firstElementChild.replaceWith(pageMap.get(pageNum));
+
     currentPageNum = pageNum;
+}
+
+function updatePageNums(forwards) {
+    let currentPageNumElement = document.getElementById("page-" + currentPageNum);
+
+    if (forwards) {
+        if (currentPageNumElement.nextElementSibling.innerHTML === "...") {
+            if (currentPageNumElement.parentElement.childElementCount == 7) {
+                let current = currentPageNumElement;
+                for (let i = 2; i >= 0; i--) {
+                    current.innerHTML = currentPageNum + i;
+                    current.id = "page-" + current.innerHTML;
+                    current = current.previousElementSibling;
+                }
+            } else {
+                let prevReplacement = document.createElement("span");
+                let nextElement = document.createElement("button");
+                let nextNextElement = document.createElement("button");
+    
+                prevReplacement.innerHTML = "...";
+                nextElement.innerHTML = currentPageNum + 1;
+                nextNextElement.innerHTML = currentPageNum + 2;
+                nextElement.id = "page-" + nextElement.innerHTML;
+                nextNextElement.id = "page-" + nextNextElement.innerHTML;
+    
+                nextElement.onclick = () => {
+                    replacePage(Number(pageIcons[i]));
+                }
+    
+                nextNextElement.onclick = () => {
+                    replacePage(Number(pageIcons[i]));
+                }
+    
+                currentPageNumElement.previousElementSibling.replaceWith(prevReplacement);
+                currentPageNumElement.insertAdjacentElement("afterend", nextElement);
+                nextElement.insertAdjacentElement("afterend", nextNextElement);
+            }
+        }
+    } else {
+        if (currentPageNumElement.nextElementSibling.innerHTML === "...") {
+
+        }
+    }
 }
 
 function nextPage() {
     if (currentPageNum + 1 < Math.ceil(results.length / 3) + 1) {
-        currentPageNum++;
-
-        getPage(currentPageNum)
+        replacePage(currentPageNum + 1)
     }
 }
 
 function prevPage() {
     if (currentPageNum - 1 > 0) {
-        currentPageNum--;
-
-        getPage(currentPageNum);
+        replacePage(currentPageNum - 1);
     }
 }
