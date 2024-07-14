@@ -183,10 +183,13 @@ function hideLoading() {
 let pageMap = new Map();
 let results;
 let currentPageNum = 0;
+let maxPageNums = 0;
 async function populateResults() {
     showLoading();
     results = await fetchResults(this);
     hideLoading();
+
+    maxPageNums = Math.ceil(results.length / 3.0);
 
     createPageNums();
     
@@ -196,7 +199,7 @@ async function populateResults() {
         }
 
         let pointer = 0;
-        for (let i = 0; i < Math.ceil(results.length / 3.0); i++) {
+        for (let i = 0; i < maxPageNums; i++) {
             pageMap.set(i + 1, createResults(pointer, pointer + 3));
             pointer += 3;
         }
@@ -263,7 +266,7 @@ function createResults(startIndex, endIndex) {
 }
 
 function createPageNums() {
-    let numPages = (results != null) ? Math.ceil(results.length / 3) : 0;
+    let numPages = (results != null) ? maxPageNums : 0;
     let pages = document.getElementById("pages");
 
     currentPageNum = 1;
@@ -294,8 +297,8 @@ function createPageNums() {
                     newElement.classList.add("active-page");
                 }
 
-                newElement.onclick = () => {
-                    replacePage(Number(pageIcons[i]));
+                newElement.onclick = (event) => {
+                    replacePage(Number(event.target.innerHTML));
                 }
             }
 
@@ -311,8 +314,8 @@ function createPageNums() {
 }
 
 function replacePage(pageNum) { 
-    let oldActiveButton = document.getElementsByClassName("active-page");
-    oldActiveButton[0].classList.remove("active-page");
+    let oldActiveButton = document.getElementsByClassName("active-page")[0];
+    oldActiveButton.classList.remove("active-page");
 
     updatePageNums((pageNum > currentPageNum));
     
@@ -328,49 +331,76 @@ function replacePage(pageNum) {
 function updatePageNums(forwards) {
     let currentPageNumElement = document.getElementById("page-" + currentPageNum);
 
-    if (forwards) {
-        if (currentPageNumElement.nextElementSibling.innerHTML === "...") {
-            if (currentPageNumElement.parentElement.childElementCount == 7) {
-                let current = currentPageNumElement;
+    let nextElement = (forwards) ? currentPageNumElement.nextElementSibling : currentPageNumElement.previousElementSibling;
+
+    if (nextElement.innerHTML === "...") {
+        if (currentPageNumElement.parentElement.childElementCount == 7) {
+            if ((forwards) ? (currentPageNum + 2 < maxPageNums) : (currentPageNum - 2 > 1)) {
+                let currElement = currentPageNumElement;
                 for (let i = 2; i >= 0; i--) {
-                    current.innerHTML = currentPageNum + i;
-                    current.id = "page-" + current.innerHTML;
-                    current = current.previousElementSibling;
+                    currElement.innerHTML = (forwards) ? currentPageNum + i : currentPageNum - i;
+                    currElement.id = "page-" + currElement.innerHTML;
+
+                    currElement.onclick = (event) => {
+                        replacePage(Number(event.target.innerHTML));
+                    }
+
+                    currElement = (forwards) ? currElement.previousElementSibling : currElement.nextElementSibling;
                 }
             } else {
-                let prevReplacement = document.createElement("span");
-                let nextElement = document.createElement("button");
-                let nextNextElement = document.createElement("button");
-    
-                prevReplacement.innerHTML = "...";
-                nextElement.innerHTML = currentPageNum + 1;
-                nextNextElement.innerHTML = currentPageNum + 2;
-                nextElement.id = "page-" + nextElement.innerHTML;
-                nextNextElement.id = "page-" + nextNextElement.innerHTML;
-    
-                nextElement.onclick = () => {
-                    replacePage(Number(pageIcons[i]));
+                if (forwards) {
+                    currentPageNumElement.nextElementSibling.remove();
+                } else {
+                    currentPageNumElement.previousElementSibling.remove();
                 }
-    
-                nextNextElement.onclick = () => {
-                    replacePage(Number(pageIcons[i]));
-                }
-    
-                currentPageNumElement.previousElementSibling.replaceWith(prevReplacement);
-                currentPageNumElement.insertAdjacentElement("afterend", nextElement);
-                nextElement.insertAdjacentElement("afterend", nextNextElement);
-            }
-        }
-    } else {
-        if (currentPageNumElement.nextElementSibling.innerHTML === "...") {
+                
+                let currElement = currentPageNumElement;
+                for (let i = 0; i < 3; i++) {
+                    if (i < 2) {
+                        currElement.innerHTML = (forwards) ? currentPageNum + 1 - i : currentPageNum - 1 + i;
+                        currElement.id = "page-" + currElement.innerHTML;
 
+                        currElement.onclick = (event) => {
+                            replacePage(Number(event.target.innerHTML));
+                        }
+                    } else {
+                        currElement.remove();
+                    }
+
+                    currElement = (forwards) ? currElement.previousElementSibling : currElement.nextElementSibling;
+                }
+                
+            }
+        } else {
+            let replacement = document.createElement("span");
+            replacement.innerHTML = "...";
+            if (forwards) {
+                currentPageNumElement.previousElementSibling.replaceWith(replacement);
+            } else {
+                currentPageNumElement.nextElementSibling.replaceWith(replacement);
+            }
+
+            let currElement = currentPageNumElement;
+            let newElement;
+            for (let i = 0; i < 2; i++) {
+                newElement = document.createElement("button");
+                newElement.innerHTML = (forwards) ? currentPageNum + i + 1 : currentPageNum - i - 1;
+                newElement.id = "page-" + newElement.innerHTML;
+
+                newElement.onclick = (event) => {
+                    replacePage(Number(event.target.innerHTML));
+                }
+
+                currElement.insertAdjacentElement((forwards) ? "afterend" : "beforebegin", newElement);
+                currElement = newElement;
+            }
         }
     }
 }
 
 function nextPage() {
-    if (currentPageNum + 1 < Math.ceil(results.length / 3) + 1) {
-        replacePage(currentPageNum + 1)
+    if (currentPageNum + 1 < maxPageNums + 1) {
+        replacePage(currentPageNum + 1);
     }
 }
 
