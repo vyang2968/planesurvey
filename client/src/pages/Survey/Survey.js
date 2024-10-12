@@ -6,7 +6,7 @@ function Survey() {
     const planes = ['A220', 'A320', 'A330', 'A340', 'A350', 'A380', 'B737', 'B747', 'B757', 'B767', 'B777', 'B787'];
     const airlines = ['American Airlines', 'United Airlines', 'Delta Airlines', 'Frontier Airlines', 'Spirit Airlines', 'Alaska Air', 'Southwest Airliens', 'Jetblue Airlines'];
 
-    const sectionStyle = 'w-full my-[3%] pt-[2%] pb-[3%] bg-silver flex flex-col items-center rounded-xl';
+    const sectionStyle = 'w-full my-[3%] pt-[2%] pb-[3%] bg-olivine flex flex-col items-center rounded-xl';
     const labelStyle = 'block mb-0.5 text-md font-semibold';
     const rowStyle = 'w-11/12 m-[1%] grid grid-flow-col';
     const inputStyle = 'w-full px-2 h-3/5 rounded-lg';
@@ -22,14 +22,14 @@ function Survey() {
 
     return (
         <>
-            <Container className='min-w-screen min-h-max h-fit bg-zinc-200 flex justify-center items-center'>
+            <Container className='min-w-screen min-h-max h-fit bg-zinc-200 flex justify-center items-center text-cornsilk'>
                 <Card className='min-w-3/5 w-3/5 h-auto bg-white rounded-3xl my-[5%] flex justify-center items-center'>
                     <Card.Body className='w-5/6 py-[5%]'>
                         <Container className='w-full text-center pb-[3%]'>
                             <Card.Title className='text-3xl mb-1'>Plane Survey</Card.Title>
                             <Card.Subtitle className='text-xs'>Please fill out the fields below with the required information</Card.Subtitle>
                         </Container>
-                        <Form className='w-full flex flex-col items-center' onSubmit={handleSubmit(onSubmit)}>
+                        <Form noValidate className='w-full flex flex-col items-center' onSubmit={handleSubmit(onSubmit)}>
                             <Container className={sectionStyle + ' pb-[5.5%] gap-y-3'}>
                                 <Container className='w-11/12 m-[1%] flex justify-between'>
                                     <Form.Group className='w-[48%]'>
@@ -121,7 +121,7 @@ function Survey() {
                                         <Controller
                                             control={control}
                                             name='manufacturer'
-                                            defaultValue=''
+                                            defaultValue='boeing'
                                             render={({field: {onChange, ref}}) => (
                                                 <Form.Check 
                                                     type='radio'
@@ -144,15 +144,14 @@ function Survey() {
                                                     type='radio'
                                                     id='boeing'
                                                     name='airline'
-                                                    value='boeing'
                                                     label={<span className='ml-1.5'>Boeing</span>}
                                                     className='flex items-center'
+                                                    value='boeing'
                                                     onChange={e => onChange(e.target.checked)}
                                                 />
                                             )}
                                         >
                                         </Controller>
-
                                     </Form.Group>
                                     <Form.Group>
                                         <Form.Label className={labelStyle}>Favorite Airplane</Form.Label>
@@ -220,7 +219,7 @@ function Survey() {
                                 </Form.Group>
                             </Container>
                             <Container className='w-full h-full mt-[3%]'>
-                                <Button className='w-1/4 py-[1%] mx-auto flex justify-center items-center bg-sky-blue text-center rounded-lg text-white' type='submit' variant='primary'>Submit</Button>
+                                <Button className='w-1/4 py-[1%] mx-auto flex justify-center items-center bg-buff text-center rounded-lg text-white' type='submit' variant='primary'>Submit</Button>
                             </Container>
                         </Form>
                     </Card.Body>
