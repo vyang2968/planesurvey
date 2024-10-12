@@ -1,28 +1,40 @@
 import {Container, Card, Form, Button} from 'react-bootstrap'
 import CustomFormSelect from '../../components/CustomFormSelect';
 import {useForm, Controller} from 'react-hook-form'
+import {yupResolver} from '@hookform/resolvers/yup'
+import {number, object, string, array} from 'yup'
 
 function Survey() {
     const planes = ['A220', 'A320', 'A330', 'A340', 'A350', 'A380', 'B737', 'B747', 'B757', 'B767', 'B777', 'B787'];
-    const airlines = ['American Airlines', 'United Airlines', 'Delta Airlines', 'Frontier Airlines', 'Spirit Airlines', 'Alaska Air', 'Southwest Airliens', 'Jetblue Airlines'];
+    const airlines = ['American Airlines', 'United Airlines', 'Delta Airlines', 'Frontier Airlines', 'Spirit Airlines', 'Alaska Air', 'Southwest Airlines', 'Jetblue Airlines'];
 
     const sectionStyle = 'w-full my-[3%] pt-[2%] pb-[3%] bg-olivine flex flex-col items-center rounded-xl';
     const labelStyle = 'block mb-0.5 text-md font-semibold';
     const rowStyle = 'w-11/12 m-[1%] grid grid-flow-col';
     const inputStyle = 'w-full px-2 h-3/5 rounded-lg';
 
+    const schema = object().shape({
+        firstName: string().required(1, 'must be at least 1 character long'),
+        lastName: string().required(1, 'must be at least 1 character long'),
+        email: string().required().email('must be a valid email'),
+        age: number().required().positive().integer().min(18, 'must be at least 18'),
+        manufacturer: string().required('must select one'),
+        airplane: string().required('must select one option'),
+        airlines: array().min(1, 'must select one'),
+        response: string().required(1, 'must be at least 1 character long')
+    });
+
     const {
         control,
         handleSubmit,
-        watch,
         formState: {errors}
-    } = useForm();
+    } = useForm({resolver: yupResolver(schema)});
 
     const onSubmit = (data) => console.log(data);
 
     return (
         <>
-            <Container className='min-w-screen min-h-max h-fit bg-zinc-200 flex justify-center items-center text-cornsilk'>
+            <Container className='min-w-screen min-h-max h-fit bg-zinc-200 flex justify-center items-center text-black'>
                 <Card className='min-w-3/5 w-3/5 h-auto bg-white rounded-3xl my-[5%] flex justify-center items-center'>
                     <Card.Body className='w-5/6 py-[5%]'>
                         <Container className='w-full text-center pb-[3%]'>
@@ -36,7 +48,7 @@ function Survey() {
                                         <Form.Label className={labelStyle}>First Name</Form.Label>
                                         <Controller 
                                             control={control} 
-                                            name='firstname'
+                                            name='firstName'
                                             defaultValue=''
                                             render={({field: {onChange, onBlur, value, ref}}) => (
                                                 <Form.Control
@@ -46,16 +58,16 @@ function Survey() {
                                                     onBlur={onBlur}
                                                     value={value}
                                                     ref={ref}
+                                                    isInvalid={errors.firstName}
                                                 />
                                             )}
-                                        >
-                                        </Controller>
+                                        />
                                     </Form.Group>
                                     <Form.Group className='w-[48%]'>
                                         <Form.Label className={labelStyle}>Last Name</Form.Label>
                                         <Controller 
                                             control={control} 
-                                            name='lastname'
+                                            name='lastName'
                                             defaultValue=''
                                             render={({field: {onChange, onBlur, value, ref}}) => (
                                                 <Form.Control 
@@ -121,34 +133,31 @@ function Survey() {
                                         <Controller
                                             control={control}
                                             name='manufacturer'
-                                            defaultValue='boeing'
-                                            render={({field: {onChange, ref}}) => (
-                                                <Form.Check 
-                                                    type='radio'
-                                                    id='airbus'
-                                                    name='airline'
-                                                    label={<span className='ml-1.5'>Airbus</span>}
-                                                    className='flex items-center'
-                                                    value='airbus'
-                                                    onChange={e => onChange(e.target.checked)}
-                                                />
-                                            )}
-                                        >
-                                        </Controller>
-                                        <Controller
-                                            control={control}
-                                            name='manufacturer'
                                             defaultValue=''
-                                            render={({field: {onChange, ref}}) => (
-                                                <Form.Check 
-                                                    type='radio'
-                                                    id='boeing'
-                                                    name='airline'
-                                                    label={<span className='ml-1.5'>Boeing</span>}
-                                                    className='flex items-center'
-                                                    value='boeing'
-                                                    onChange={e => onChange(e.target.checked)}
-                                                />
+                                            render={({field: {onChange, value}}) => (
+                                                <>
+                                                    <Form.Check 
+                                                        type='radio'
+                                                        id='airbus'
+                                                        name='manufacturer'
+                                                        label={<span className='ml-1.5'>Airbus</span>}
+                                                        className='flex items-center'
+                                                        value='airbus'
+                                                        checked={value === 'airbus'}
+                                                        onChange={e => onChange(e.target.value)}
+                                                    />
+                                                    <Form.Check 
+                                                        type='radio'
+                                                        id='boeing'
+                                                        name='manufacturer'
+                                                        label={<span className='ml-1.5'>Boeing</span>}
+                                                        className='flex items-center'
+                                                        value='boeing'
+                                                        checked={value === 'boeing'}
+                                                        onChange={e => onChange(e.target.value)}
+                                                    />
+                                                </>
+
                                             )}
                                         >
                                         </Controller>
@@ -178,7 +187,7 @@ function Survey() {
                                     <Controller 
                                             control={control} 
                                             name='airlines'
-                                            defaultValue={false}
+                                            defaultValue={new Set()}
                                             render={({field: {onChange, value}}) => (
                                                 airlines.map(airline => (
                                                     <Form.Check 
@@ -186,8 +195,17 @@ function Survey() {
                                                         key={`${airline}`}
                                                         label={<span className='ml-1.5'>{airline}</span>}
                                                         className='flex items-center'
-                                                        onChange={e => onChange(e.target.checked)}
-                                                        checked={value}
+                                                        onChange={e => {
+                                                            const updatedAirlines = new Set(value);
+
+                                                            if (e.target.checked) {
+                                                                updatedAirlines.add(airline);
+                                                            } else {
+                                                                updatedAirlines.delete(airline);
+                                                            }
+                                                            onChange(updatedAirlines)
+                                                        }}
+                                                        checked={value.has(airline)}
                                                     />
                                                 ))
                                             )}
