@@ -1,3 +1,3 @@
-import Survey from "./Survey/Survey";
+import Survey from "./survey/Survey"
 
 export {Survey}
