@@ -6,18 +6,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'sky-blue': '#87CEEB',
-        'davys-gray': '#5D5D5D',
-        'alice-blue': '#FOF8FF',
-        'jet': '#2F2F2F',
-        'silver': '#C0C0C0',
-        'buff': '#D4A373',
-        'papaya-whip' : '#FAEDCD',
-        'cornsilk' : '#FEFAE0',
-        'olivine' : "#B3C186"
+        'soft-gray': '#E3E2E9',
+        'light-gray': '#F9F9F9',
+        'charcoal': '#373737',
+        'soft-black': '#1B1B1B',
+        'indigo': '#263374',
+        'darker-gray': '#D7D7D7'
       }
     },
   },
-  plugins: [],
+  plugins: [
+  ],
 }
 

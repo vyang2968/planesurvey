@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { number, object, string, array } from 'yup'
 import Select from 'react-select';
 import ErrorMessage from '../../components/ErrorMessage';
+import classNames from 'classnames'
 
 function Survey() {
     const planes = [
@@ -22,13 +23,15 @@ function Survey() {
     ]
     const airlines = ['American Airlines', 'United Airlines', 'Delta Airlines', 'Frontier Airlines', 'Spirit Airlines', 'Alaska Air', 'Southwest Airlines', 'Jetblue Airlines'];
 
-    const sectionStyle = 'w-full my-[3%] pt-[2%] pb-[3%] bg-olivine flex flex-col items-center rounded-xl';
-    const labelStyle = 'block mb-0.5 text-md font-semibold';
+    const sectionStyle = 'w-full my-[3%] pt-[2%] pb-[3%] flex flex-col items-center rounded-xl bg-white text-soft-black';
+    const labelStyle = 'block mb-0.5 text-md font-semibold text-indigo';
     const rowStyle = 'w-11/12 m-[1%] grid grid-flow-col';
-    const inputStyle = 'w-full px-2 h-1/2 rounded-lg text-xs lg:text-base';
-    const inputErrorStyle = inputStyle + ' outline-red-600 outline outline-2' 
-    const optionErrorStyle = 'outline-red-600 outline outline-2'
-    const errorStyle = 'w-full h-3 text-red-600 text-[0.5em] lg:text-xs pt-0.2 lg:pt-0.5'
+    const boxFocusedStyle = 'ring-blue-300 ring ring-2'
+    const boxFocusStyle = 'focus:ring-blue-300 focus:ring focus:ring-2'
+    const inputStyle = 'w-full px-2 h-3/5 rounded-lg text-xs lg:text-base outline-none border-none ring-none hover:ring-blue-300 hover:ring hover:ring-2 focus:placeholder-opacity-100 bg-light-gray shadow-sm'
+    const boxErrorStyle = 'ring-red-600 ring ring-2';
+    const inputErrorStyle = inputStyle + ' ' + boxErrorStyle;
+    const errorStyle = 'w-full h-3 text-red-600 text-[0.5em] lg:text-xs pt-0.2 lg:pt-0.5 italic'
 
     const schema = object().shape({
         firstName: string().required('empty field').min(1, 'must be at least 1'),
@@ -47,23 +50,36 @@ function Survey() {
     const {
         control,
         handleSubmit,
-        formState: {errors}
-    } = useForm({resolver: yupResolver(schema)});
+        formState: {errors},
+        reset
+    } = useForm({
+        resolver: yupResolver(schema),
+        mode: "onSubmit",
+    });
 
-    const onSubmit = (data) => console.log(data);
+    const onSubmit = (data, e) => {
+        console.log(data);
+        reset({manufacturer: ''});
+    };
 
     return (
         <>
-            <Container className='min-w-screen min-h-max h-fit bg-zinc-200 flex justify-center items-center text-black'>
-                <Card className='min-w-3/5 w-4/5 lg:w-3/5 h-auto bg-white rounded-3xl my-[5%] flex justify-center items-center'>
-                    <Card.Body className='w-5/6 py-[5%]'>
+            <Container 
+                className={classNames(
+                    'min-w-screen min-h-max h-fit flex justify-center items-center text-black m-0 p-0 overflow-hidden',
+                    "relative before:absolute before:inset-0 before:bg-[url('assets/plane.jpg')] before:bg-no-repeat before:bg-cover before:bg-left-bottom before:bg-local before:blur before:z-[-1] before:bg-left-bottom",
+                    'before:bg-white before:opacity-60'
+                )}
+            >
+                <Card className='min-w-3/5 w-4/5 lg:w-3/5 h-auto rounded-3xl my-[5%] flex justify-center items-center bg-soft-gray'>
+                    <Card.Body className='w-5/6 py-[5%] text-indigo'>
                         <Container className='w-full text-center pb-[3%]'>
-                            <Card.Title className='text-3xl mb-1 lg:text-4xl'>Plane Survey</Card.Title>
-                            <Card.Subtitle className='text-xs'>Please fill out the fields below with the required information</Card.Subtitle>
+                            <Card.Title className='text-3xl mb-1 lg:mb-0.5 lg:text-5xl font-bold'>Plane Survey</Card.Title>
+                            <Card.Subtitle className='text-xs lg:text-base text-charcoal'>Please fill out the fields below with the required information</Card.Subtitle>
                         </Container>
-                        <Form noValidate className='w-full flex flex-col items-center' onSubmit={handleSubmit(onSubmit)}>
+                        <Form noValidate className='w-full flex flex-col items-center text-base lg:text-lg' onSubmit={handleSubmit(onSubmit)}>
                             <Container className={sectionStyle}>
-                                <Container className='w-11/12 m-[1%] flex justify-between'>
+                                <Container className='w-11/12 m-[1%] flex justify-between mb-[2%]'>
                                     <Form.Group className='w-[48%]'>
                                         <Form.Label className={labelStyle}>First Name</Form.Label>
                                         <Controller 
@@ -73,7 +89,10 @@ function Survey() {
                                             render={({field: {onChange, onBlur, value, ref}}) => (
                                                 <Form.Control
                                                     placeholder='Chuck'
-                                                    className={errors.firstName ? inputErrorStyle : inputStyle}
+                                                    className={classNames(
+                                                        boxFocusStyle,
+                                                        errors.firstName ? inputErrorStyle : inputStyle
+                                                    )}
                                                     onChange={onChange}
                                                     onBlur={onBlur}
                                                     value={value}
@@ -93,7 +112,10 @@ function Survey() {
                                             render={({field: {onChange, onBlur, value, ref}}) => (
                                                 <Form.Control 
                                                     placeholder='Yeager'
-                                                    className={errors.lastName ? inputErrorStyle : inputStyle}
+                                                    className={classNames(
+                                                        boxFocusStyle,
+                                                        errors.lastName ? inputErrorStyle : inputStyle
+                                                    )}
                                                     onChange={onChange}
                                                     onBlur={onBlur}
                                                     value={value}
@@ -115,7 +137,10 @@ function Survey() {
                                                 <Form.Control 
                                                     type='email'
                                                     placeholder='cyeager1947@example.com'
-                                                    className={errors.email ? inputErrorStyle : inputStyle}
+                                                    className={classNames(
+                                                        boxFocusStyle,
+                                                        errors.email ? inputErrorStyle : inputStyle
+                                                    )}
                                                     onChange={onChange}
                                                     onBlur={onBlur}
                                                     value={value}
@@ -138,7 +163,10 @@ function Survey() {
                                                     placeholder='18'
                                                     min='18'
                                                     max='125'
-                                                    className={errors.age ? inputErrorStyle : inputStyle}
+                                                    className={classNames(
+                                                        boxFocusStyle,
+                                                        errors.age ? inputErrorStyle : inputStyle
+                                                    )}
                                                     onChange={onChange}
                                                     onBlur={onBlur}
                                                     value={value}
@@ -159,28 +187,57 @@ function Survey() {
                                             control={control}
                                             name='manufacturer'
                                             defaultValue=''
-                                            render={({field: {onChange, value}}) => (
+                                            render={({field: {onChange, value, ref}}) => (
                                                 <>
                                                     <Form.Check 
-                                                        type='radio'
                                                         id='airbus'
-                                                        name='manufacturer'
-                                                        label={<span className='ml-1.5'>Airbus</span>}
-                                                        className='flex items-center'
+                                                        className='flex items-center w-fit hover:cursor-pointer'
                                                         value='airbus'
                                                         checked={value === 'airbus'}
-                                                        onChange={e => onChange(e.target.value)}
-                                                    />
-                                                    <Form.Check 
-                                                        type='radio'
-                                                        id='boeing'
                                                         name='manufacturer'
-                                                        label={<span className='ml-1.5'>Boeing</span>}
-                                                        className='flex items-center'
-                                                        value='boeing'
+                                                    >
+                                                        <Form.Check.Input 
+                                                            type='radio'
+                                                            value='airbus'
+                                                            className={
+                                                                classNames(
+                                                                'appearance-none h-4 w-4 rounded-full p-1 border-[3px] border-soft-gray bg-soft-gray',
+                                                                'checked:bg-charcoal',
+                                                                'hover:cursor-pointer hover:ring-blue-300 hover:ring-2',
+                                                                'active:brightness-75',
+                                                                'shadow-sm'
+                                                            )}
+                                                            onChange={e => onChange(e.target.value)}
+                                                            ref={ref}
+                                                            name='manufacturer'
+                                                        />
+                                                        <Form.Check.Label className='ml-2 font-normal hover:cursor-pointer'>
+                                                            Airbus
+                                                        </Form.Check.Label>
+                                                    </Form.Check>
+                                                    <Form.Check 
+                                                        id='boeing'
+                                                        className='flex items-center w-fit hover:cursor-pointer'
                                                         checked={value === 'boeing'}
-                                                        onChange={e => onChange(e.target.value)}
-                                                    />
+                                                    >
+                                                        <Form.Check.Input 
+                                                            type='radio'
+                                                            value='boeing'
+                                                            className={
+                                                                classNames(
+                                                                'appearance-none h-4 w-4 rounded-full p-1 border-[3px] border-soft-gray bg-soft-gray',
+                                                                'checked:bg-charcoal',
+                                                                'hover:cursor-pointer hover:ring-blue-300 hover:ring-2',
+                                                                'active:brightness-75'
+                                                            )}
+                                                            name='manufacturer'
+                                                            onChange={e => onChange(e.target.value)}
+                                                            ref={ref}
+                                                        />
+                                                        <Form.Check.Label className='ml-2 font-normal hover:cursor-pointer'>
+                                                            Boeing
+                                                        </Form.Check.Label>
+                                                    </Form.Check>
                                                 </>
                                             )}
                                         >
@@ -200,6 +257,42 @@ function Survey() {
                                                     value={value}
                                                     onChange={(selectedOption) => onChange(selectedOption)}
                                                     placeholder='(select one)'
+                                                    isSearchable={false}
+                                                    unstyled
+                                                    classNames={{
+                                                        control: (state) => classNames(
+                                                            'bg-light-gray rounded-lg hover:cursor-pointer hover:ring-blue-300 hover:ring hover:ring-2 text-black',
+                                                            state.isFocused ? boxFocusedStyle : '',
+                                                            errors.airplane && !state.isFocused ? boxErrorStyle : ''
+                                                        ),
+                                                        valueContainer: () => classNames(
+                                                            'ml-2'
+                                                        ),
+                                                        placeholder: () => classNames(
+                                                            'text-gray-400'
+                                                        ),
+                                                        indicatorsContainer: () => classNames(
+                                                            'mr-2 h-10'
+                                                        ),
+                                                        input: () => classNames(
+                                                            'w-4'
+                                                        ),
+                                                        menu: () => classNames(
+                                                            'bg-white', 'rounded-lg', 'mt-1', 'shadow', 
+                                                        ),
+                                                        menuList: () => classNames(
+                                                            'py-1.5','rounded-lg', 'cursor-pointer'
+                                                        ),
+                                                        option: () => classNames(
+                                                            'py-1.5', 'hover:bg-blue-300/50', 'px-2', 'hover:cursor-pointer', 'active:bg-blue-300/60', 'text-black'
+                                                        ),
+                                                        clearIndicator: () => classNames(
+                                                            'py-0 m-0'
+                                                        ),
+                                                        dropdownIndicator: () => classNames(
+                                                            'py-1 m-0'
+                                                        )
+                                                    }}
                                                 />
                                             )}
                                         />
@@ -217,22 +310,39 @@ function Survey() {
                                             render={({field: {onChange, value}}) => (
                                                 airlines.map(airline => (
                                                     <Form.Check 
-                                                        type='checkbox'
                                                         key={`${airline}`}
-                                                        label={<span className='ml-1.5'>{airline}</span>}
                                                         className='flex items-center'
-                                                        onChange={e => {
-                                                            let updatedAirlines = [...value];
-
-                                                            if (e.target.checked) {
-                                                                updatedAirlines.push(airline);
-                                                            } else {
-                                                                updatedAirlines = updatedAirlines.filter(a => airline !== a)
-                                                            }
-                                                            onChange(updatedAirlines)
-                                                        }}
-                                                        checked={value.includes(airline)}
-                                                    />
+                                                    >
+                                                        <Form.Check.Input 
+                                                            type='checkbox'
+                                                            id={`checkbox-${airline}`}
+                                                            className={classNames(
+                                                                'appearance-none h-3.5 w-3.5 rounded-sm bg-soft-gray relative', 
+                                                                'checked:after:content-[""] checked:after:absolute checked:after:top-1/2 checked:after:left-1/2',
+                                                                'checked:after:transform checked:after:-translate-x-1/2 checked:after:-translate-y-1/2',
+                                                                'checked:after:w-2 checked:after:h-2 checked:after:bg-charcoal checked:after:rounded-sm',
+                                                                'hover:cursor-pointer hover:ring-blue-300 hover:ring-2',
+                                                                'active:brightness-75',
+                                                            )}
+                                                            onChange={e => {
+                                                                let updatedAirlines = [...value];
+    
+                                                                if (e.target.checked) {
+                                                                    updatedAirlines.push(airline);
+                                                                } else {
+                                                                    updatedAirlines = updatedAirlines.filter(a => airline !== a)
+                                                                }
+                                                                onChange(updatedAirlines)
+                                                            }}
+                                                            checked={value.includes(airline)}
+                                                        />
+                                                        <Form.Check.Label 
+                                                            className='ml-2 font-normal hover:cursor-pointer'
+                                                            htmlFor={`checkbox-${airline}`}
+                                                        >
+                                                            {airline}
+                                                        </Form.Check.Label>
+                                                    </Form.Check>
                                                 ))
                                             )}
                                         >
@@ -252,7 +362,12 @@ function Survey() {
                                                     as='textarea'
                                                     rows={3}
                                                     cols={200}
-                                                    className={'w-full min-h-[8ch] max-h-[20ch] px-2 pt-1 mt-[1%] rounded-lg block' + ((errors.response) ? ' outline-red-600 outline outline-2' : '')}
+                                                    className={classNames(
+                                                        'w-full min-h-[8ch] max-h-[20ch] px-2 pt-1 mt-[1%] rounded-lg block bg-light-gray shadow-sm',
+                                                        (errors.response) ? boxErrorStyle : '',
+                                                        'outline-none border-none ring-none hover:ring-blue-300 hover:ring hover:ring-2',
+                                                        'focus:ring-blue-300 focus:ring focus:ring-2'
+                                                    )}
                                                     onChange={onChange}
                                                     onBlur={onBlur}
                                                     value={value}
@@ -265,7 +380,16 @@ function Survey() {
                                 </Form.Group>
                             </Container>
                             <Container className='w-full h-full mt-[3%]'>
-                                <Button className='w-1/2 lg:w-1/4 py-[1%] mx-auto flex justify-center items-center bg-buff text-center rounded-lg text-white' type='submit' variant='primary'>Submit</Button>
+                                <Button 
+                                    className={classNames(
+                                    'w-1/2 lg:w-1/5 py-[1%] mx-auto flex justify-center items-center bg-indigo',
+                                    'text-center rounded-lg text-white hover:brightness-[95%]'
+                                    )}
+                                    type='submit'
+                                    ariant='primary'
+                                >
+                                    Submit
+                                </Button>
                             </Container>
                         </Form>
                     </Card.Body>
