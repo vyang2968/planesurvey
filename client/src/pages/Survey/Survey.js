@@ -5,6 +5,11 @@ import { number, object, string, array } from 'yup'
 import Select from 'react-select';
 import ErrorMessage from '../../components/ErrorMessage';
 import classNames from 'classnames'
+import { Helmet } from 'react-helmet-async'
+import axios from 'axios'
+import { useRef, useState } from 'react';
+import LoadingBar from 'react-top-loading-bar';
+import { useNavigate } from 'react-router-dom';
 
 function Survey() {
     const planes = [
@@ -57,16 +62,49 @@ function Survey() {
         mode: "onSubmit",
     });
 
-    const onSubmit = (data, e) => {
-        console.log(data);
-        reset({manufacturer: ''});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const ref = useRef(null);
+    const navigate = useNavigate();
+
+    const onSubmit = (data) => {
+        setIsSubmitting(true);
+        ref.current.continuousStart(30, 150);
+        new Promise((resolve, reject) => {
+            setTimeout(() => {
+                const simulatedResponse = { status: 200, data: { message: "Success!" } };
+                resolve(simulatedResponse);
+                // Uncomment this to simulate an error:
+                // reject(new Error("Simulated server error"));
+            }, 3000); // Simulated network delay (3 second)
+        })
+        .then((res) => {
+            console.log("Server Response:", res.data);
+            reset();
+            navigate("/submitted");
+        })
+        .catch((error) => {
+            console.error("Error:", error.message);
+            alert("ERROR SUBMITTING");
+        })
+        .finally(() => {
+            setIsSubmitting(false);
+            ref.current.complete();
+        });
     };
+    
 
     return (
         <>
+            <Helmet>
+                <title>Plane Survey</title>
+                <meta name='description' content='survey for everything aviation related' />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <link rel="shortcut icon" type="image/png" href={''} />
+            </Helmet>
+            <LoadingBar ref={ref} color='#2563eb' shadow={false} height={3} />
             <Container 
                 className={classNames(
-                    'min-w-screen min-h-max h-fit flex justify-center items-center text-black m-0 p-0 overflow-hidden',
+                    'min-w-dvw min-h-dvh flex justify-center items-center text-black m-0 p-0 overflow-hidden',
                     "relative before:absolute before:inset-0 before:bg-[url('assets/plane.jpg')] before:bg-no-repeat before:bg-cover before:bg-left-bottom before:bg-local before:blur before:z-[-1] before:bg-left-bottom",
                     'before:bg-white before:opacity-60'
                 )}
@@ -193,7 +231,6 @@ function Survey() {
                                                         id='airbus'
                                                         className='flex items-center w-fit hover:cursor-pointer'
                                                         value='airbus'
-                                                        checked={value === 'airbus'}
                                                         name='manufacturer'
                                                     >
                                                         <Form.Check.Input 
@@ -210,6 +247,7 @@ function Survey() {
                                                             onChange={e => onChange(e.target.value)}
                                                             ref={ref}
                                                             name='manufacturer'
+                                                            checked={value === 'airbus'}
                                                         />
                                                         <Form.Check.Label className='ml-2 font-normal hover:cursor-pointer'>
                                                             Airbus
@@ -218,7 +256,8 @@ function Survey() {
                                                     <Form.Check 
                                                         id='boeing'
                                                         className='flex items-center w-fit hover:cursor-pointer'
-                                                        checked={value === 'boeing'}
+                                                        value='airbus'
+                                                        name='boeing'
                                                     >
                                                         <Form.Check.Input 
                                                             type='radio'
@@ -230,9 +269,10 @@ function Survey() {
                                                                 'hover:cursor-pointer hover:ring-blue-300 hover:ring-2',
                                                                 'active:brightness-75'
                                                             )}
-                                                            name='manufacturer'
                                                             onChange={e => onChange(e.target.value)}
                                                             ref={ref}
+                                                            name='manufacturer'
+                                                            checked={value === 'boeing'}
                                                         />
                                                         <Form.Check.Label className='ml-2 font-normal hover:cursor-pointer'>
                                                             Boeing
@@ -269,7 +309,7 @@ function Survey() {
                                                             'ml-2'
                                                         ),
                                                         placeholder: () => classNames(
-                                                            'text-gray-400'
+                                                            'text-gray-400 text-xs lg:text-base'
                                                         ),
                                                         indicatorsContainer: () => classNames(
                                                             'mr-2 h-10'
@@ -383,10 +423,12 @@ function Survey() {
                                 <Button 
                                     className={classNames(
                                     'w-1/2 lg:w-1/5 py-[1%] mx-auto flex justify-center items-center bg-indigo',
-                                    'text-center rounded-lg text-white hover:brightness-[95%]'
+                                    'text-center rounded-lg text-white',
+                                    isSubmitting ? 'brightness-[90%]' : 'active:brightness-[90%] hover:brightness-125'
                                     )}
                                     type='submit'
                                     ariant='primary'
+                                    disabled={isSubmitting}
                                 >
                                     Submit
                                 </Button>

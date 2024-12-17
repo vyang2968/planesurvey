@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "react-select": "^5.9.0",
-    "yup": "^1.4.0"
-  }
-}
