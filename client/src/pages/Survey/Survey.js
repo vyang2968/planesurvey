@@ -71,7 +71,10 @@ function Survey() {
         ref.current.continuousStart(30, 150);
         new Promise((resolve, reject) => {
             setTimeout(() => {
-                const simulatedResponse = { status: 200, data: { message: "Success!" } };
+                const simulatedResponse = { 
+                    status: 200, 
+                    data: data 
+                };
                 resolve(simulatedResponse);
                 // Uncomment this to simulate an error:
                 // reject(new Error("Simulated server error"));
