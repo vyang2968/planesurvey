@@ -44,10 +44,7 @@ function Survey() {
         email: string().required('empty field').email('must be a valid email'),
         age: number().typeError('must be a number').required('empty field').positive().integer('must be a integer').min(18, 'must be at least 18'),
         manufacturer: string().required('must select one'),
-        airplane: object().shape({
-            value: string(),
-            label: string()
-        }).required('must pick one'),
+        airplane: string().required('must pick one'),
         airlines: array().min(1, 'must select at least one'),
         response: string().required('empty field').min(1, 'must be at least 1')
     });
@@ -69,29 +66,29 @@ function Survey() {
     const onSubmit = (data) => {
         setIsSubmitting(true);
         ref.current.continuousStart(30, 150);
-        new Promise((resolve, reject) => {
-            setTimeout(() => {
-                const simulatedResponse = { 
-                    status: 200, 
-                    data: data 
-                };
-                resolve(simulatedResponse);
-                // Uncomment this to simulate an error:
-                // reject(new Error("Simulated server error"));
-            }, 3000); // Simulated network delay (3 second)
-        })
+        
+        axios.post(
+            'http://localhost:8080/responses/create',
+            data,
+            { 
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true 
+            }
+        )
         .then((res) => {
-            console.log("Server Response:", res.data);
-            reset();
+            ref.current.complete();
+            console.log("server response", res.status);
             navigate("/submitted");
+            reset();
         })
         .catch((error) => {
-            console.error("Error:", error.message);
-            alert("ERROR SUBMITTING");
+            ref.current.complete();
+            console.error("error:", error.response?.data || error.message);
+            alert(error.response?.data?.message || "Error submitting form");
+            // TODO: dsome cooler looking alert
         })
         .finally(() => {
             setIsSubmitting(false);
-            ref.current.complete();
         });
     };
     
@@ -297,8 +294,8 @@ function Survey() {
                                                 <Select
                                                     inputRef={ref}
                                                     options={planes}
-                                                    value={value}
-                                                    onChange={(selectedOption) => onChange(selectedOption)}
+                                                    value={planes.find((option) => option.value === value)} // Find the object in options that matches the value
+                                                    onChange={(selectedOption) => onChange(selectedOption.label)}
                                                     placeholder='(select one)'
                                                     isSearchable={false}
                                                     unstyled
