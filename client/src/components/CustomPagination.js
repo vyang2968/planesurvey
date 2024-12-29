@@ -1,12 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { Container, PageItem, Pagination } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import classNames from "classnames";
 
-export default function CustomPagination({ className, endPage, pagesPerView }) { 
+export default function CustomPagination({ className, resource, pagesPerView, onChange }) { 
     const buttonStyling = "flex justify-center items-center h-1/4 aspect-square p-3 bg-blue-300 text-lg"
     const [activePage, setActivePage] = useState(1)
+    const endPage = Math.ceil(resource.read().totalElements / pagesPerView)
 
     function calculateItems() {
         let list = []
@@ -38,7 +39,12 @@ export default function CustomPagination({ className, endPage, pagesPerView }) {
 
         return list
     }
+
+    useEffect(() => {
+        onChange(activePage)
+    }, [activePage, onChange])
     
+
     return (
         <Pagination className={className}>
             <PageItem className="flex justify-center items-center text-center">

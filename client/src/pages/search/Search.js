@@ -1,15 +1,75 @@
-import { Container, Card, Pagination, Dropdown } from 'react-bootstrap'
+import { Container, Card, Spinner } from 'react-bootstrap'
 import classNames from 'classnames'
 import SearchBar from '../../components/SearchBar'
 import CustomDropdown from '../../components/CustomDropdown'
-import { Suspense, useRef } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import { Suspense, useState, useEffect, startTransition } from 'react'
 import CustomPagination from '../../components/CustomPagination'
+import axios from 'axios'
+import ResponseSection from '../../components/ResponseSection'
+import useFetchData from '../../hooks/useFetchData'
+import ResponseSectionFallback from '../../components/ResponseSectionFallback'
+import Skeleton from 'react-loading-skeleton'
 
 export default function Search() {
-    const fakeItems = ['test1','test2','test3']
-    const fakeFilterCategories = ['cat1', 'cat2', 'cat3']
+    const fakeItems = ['test1','test2','test3'];
+    const fakeFilterCategories = ['cat1', 'cat2', 'cat3'];
+
+    const filterCategories = ['firstName', 'lastName', 'email', 'age', 'manufacturer', 'airlines', 'response']
+
+    const filterByDefaultText = 'filter by';
+    const sortDefaultText = 'sort';
+    const [filterByActive, setFilterByActive] = useState('firstName');
+    const [sortActive, setSortActive] = useState('asc');
+
+    const [searchBarText, setSearchBarText] = useState('')
+
+    const [activePage, setActivePage] = useState(1)
+
+    const pagesPerView = 3;
+
+    const [resource, refetch] = useFetchData(
+        'http://localhost:8080/responses/search/all',
+        {
+            field: filterByActive,
+            page: activePage - 1,
+            size: pagesPerView,
+            direction: sortActive
+        }
+    )
+
+    const handlePageChange = (newPage) => {
+        startTransition(() => {
+            setActivePage(newPage)
+            refetch({
+                field: filterByActive,
+                page: activePage - 1,
+                size: pagesPerView, 
+                direction: sortActive
+            })
+        })
+    }
+
+    // useEffect(() => {
+    //     axios.get(
+    //         'http://localhost:8080/responses/search',
+    //         {
+    //             headers: { 'Content-Type': 'application/json' },
+    //             withCredentials: true,
+    //             params: {
+    //                 field: filterByActive,
+    //                 value: searchBarText,
+    //                 page: activePage - 1,
+    //                 size: pagesPerView,
+    //                 direction: sortActive
+    //             }
+    //         }
+    //     ).then((res) => {
+    //         setData(res.data.content);
+    //         setTotalItems(res.data.totalElements);
+    //     }).catch((error) => {
+    //         console.error(error);
+    //     })
+    // }, [activePage, filterByActive, searchBarText, sortActive])
 
     return(
         <>
@@ -28,31 +88,49 @@ export default function Search() {
                     <Card.Body className='w-5/6 py-[3%] space-y-[3%]'>
                         <Container className='w-full h-fit rounded-xl flex justify-center items-center bg-white text-soft-black'>
                             <Container className='w-full h-fit flex flex-row items-center bg-light-gray rounded-xl m-4 divide-x'>
-                                <SearchBar className='w-full h-fit bg-light-gray' />
-                                <CustomDropdown 
-                                    className='w-2/12 h-fit text-center text-nowrap'  
-                                    title='filter by' 
-                                    items={fakeFilterCategories}
+                                <SearchBar 
+                                    className='w-full h-fit bg-light-gray' 
+                                    placeholder='search for a response...'
+                                    onChange={(text) => setSearchBarText(text)}
                                 />
                                 <CustomDropdown 
                                     className='w-2/12 h-fit text-center text-nowrap'  
-                                    title='sort'
+                                    placeholder={filterByDefaultText}
+                                    items={filterCategories}
+                                    onChange={(active) => setFilterByActive(active)}
+
+                                />
+                                <CustomDropdown 
+                                    className='w-2/12 h-fit text-center text-nowrap'  
+                                    placeholder={sortDefaultText}
                                     items={fakeFilterCategories}
+                                    onChange={(active) => setSortActive(active)}
                                 />
                             </Container>
                         </Container>
-                            <Container className='w-full bg-white rounded-xl'>
-                                <Suspense>
-                                    <Container className='divide-y'>
-                                        {fakeItems.map(item => 
-                                            <div className='w-full h-[250px] p-4'>{item}</div>
-                                        )}
-                                    </Container>
+                        <Container className='w-full bg-white rounded-xl'>
+                            <Suspense 
+                                fallback={
+                                    <ResponseSectionFallback numSections={pagesPerView} numFields={8} className={'w-full h-fit divide-y-2'}/>
+                                }
+                            >
+                                <ResponseSection 
+                                    className='w-full h-fit divide-y-2'
+                                    resource={resource}
+                                    pagesPerView={pagesPerView}
+                                />
+                            </Suspense>
+                        </Container>
+                            <Container className='w-full flex justify-center items-center'>
+                                <Suspense fallback={''}>
+                                    <CustomPagination 
+                                        className='flex flex-row justify-evenly items-center w-4/6' 
+                                        resource={resource} 
+                                        pagesPerView={pagesPerView}
+                                        onChange={(page) => handlePageChange(page)}
+                                    />
                                 </Suspense>
                             </Container>
-                        <Container className='w-full flex justify-center items-center'>
-                            <CustomPagination className='flex flex-row justify-evenly items-center w-4/6' endPage={100} pagesPerView={5}/>
-                        </Container>
                     </Card.Body>
                 </Card>
             </Container>

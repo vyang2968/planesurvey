@@ -7,9 +7,10 @@ import ErrorMessage from '../../components/ErrorMessage';
 import classNames from 'classnames'
 import { Helmet } from 'react-helmet-async'
 import axios from 'axios'
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import LoadingBar from 'react-top-loading-bar';
 import { useNavigate } from 'react-router-dom';
+import CustomModal from '../../components/ErrorModal';
 
 function Survey() {
     const planes = [
@@ -60,6 +61,8 @@ function Survey() {
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+
     const ref = useRef(null);
     const navigate = useNavigate();
 
@@ -77,21 +80,23 @@ function Survey() {
         )
         .then((res) => {
             ref.current.complete();
+            setTimeout(() => {
+                navigate("/submitted");
+                reset();
+            }, 900)
             console.log("server response", res.status);
-            navigate("/submitted");
-            reset();
         })
         .catch((error) => {
             ref.current.complete();
+            setTimeout(() => {
+                setShowModal(true)
+            }, 900)
             console.error("error:", error.response?.data || error.message);
-            alert(error.response?.data?.message || "Error submitting form");
-            // TODO: dsome cooler looking alert
         })
         .finally(() => {
             setIsSubmitting(false);
         });
     };
-    
 
     return (
         <>
@@ -101,7 +106,12 @@ function Survey() {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <link rel="shortcut icon" type="image/png" href={''} />
             </Helmet>
-            <LoadingBar ref={ref} color='#2563eb' shadow={false} height={3} />
+            <LoadingBar 
+                ref={ref} 
+                color='#2563eb' 
+                shadow={false} 
+                height={3} 
+            />
             <Container 
                 className={classNames(
                     'min-w-dvw min-h-dvh flex justify-center items-center text-black m-0 p-0 overflow-hidden',
@@ -109,6 +119,11 @@ function Survey() {
                     'before:bg-white before:opacity-60'
                 )}
             >
+                <CustomModal 
+                    isOpen={showModal} 
+                    onClose={() => setShowModal(false)} 
+                    className='w-full h-full' 
+                />
                 <Card className='min-w-3/5 w-4/5 lg:w-3/5 h-auto rounded-3xl my-[5%] flex justify-center items-center bg-soft-gray'>
                     <Card.Body className='w-5/6 py-[5%] text-indigo'>
                         <Container className='w-full text-center pb-[3%]'>
@@ -138,7 +153,7 @@ function Survey() {
                                                 />
                                             )}
                                         />
-                                        <ErrorMessage error={errors.firstName} style={errorStyle}/>
+                                        <ErrorMessage error={errors.firstName} className={errorStyle}/>
                                     </Form.Group>
 
                                     <Form.Group className='w-[48%]'>
@@ -161,7 +176,7 @@ function Survey() {
                                                 />
                                             )}
                                         />
-                                        <ErrorMessage error={errors.lastName} style={errorStyle}/>
+                                        <ErrorMessage error={errors.lastName} className={errorStyle}/>
                                     </Form.Group>
                                 </Container>
                                 <Container className='w-11/12 m-[1%] flex justify-between'>
@@ -187,7 +202,7 @@ function Survey() {
                                             )}
                                         >
                                         </Controller>
-                                        <ErrorMessage error={errors.email}  style={errorStyle} />
+                                        <ErrorMessage error={errors.email}  className={errorStyle} />
                                     </Form.Group>
                                     <Form.Group className='w-2/12'>
                                         <Form.Label className={labelStyle}>Age</Form.Label>
@@ -213,7 +228,7 @@ function Survey() {
                                             )}
                                         >
                                         </Controller>
-                                        <ErrorMessage error={errors.age} style={errorStyle}/>
+                                        <ErrorMessage error={errors.age} className={errorStyle}/>
                                     </Form.Group>
                                 </Container>
                             </Container>
@@ -282,7 +297,7 @@ function Survey() {
                                             )}
                                         >
                                         </Controller>
-                                        <ErrorMessage error={errors.manufacturer} style={errorStyle} />
+                                        <ErrorMessage error={errors.manufacturer} className={errorStyle} />
                                     </Form.Group>
                                     <Form.Group className='w-full'>
                                         <Form.Label className={labelStyle}>Favorite Airplane</Form.Label>
@@ -336,7 +351,7 @@ function Survey() {
                                                 />
                                             )}
                                         />
-                                        <ErrorMessage error={errors.airplane} style={errorStyle} />
+                                        <ErrorMessage error={errors.airplane} className={errorStyle} />
                                         </Form.Group>
                                 </Container>
                             </Container>
@@ -387,7 +402,7 @@ function Survey() {
                                             )}
                                         >
                                         </Controller>
-                                        <ErrorMessage error={errors.airlines} style={errorStyle}/>
+                                        <ErrorMessage error={errors.airlines} className={errorStyle}/>
                                 </Form.Group>
                             </Container>
                             <Container className={sectionStyle}>
@@ -416,7 +431,7 @@ function Survey() {
                                             )}
                                         >
                                         </Controller>
-                                        <ErrorMessage error={errors.response}  style={errorStyle} className='mt-[-5px]' />
+                                        <ErrorMessage error={errors.response}  className={errorStyle} />
                                 </Form.Group>
                             </Container>
                             <Container className='w-full h-full mt-[3%]'>

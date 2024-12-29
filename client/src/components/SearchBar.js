@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import classNames from "classnames";
 
 
-export default function SearchBar({ className }) {
+export default function SearchBar({ className, placeholder, onChange }) {
     const [searchActive, setSearchActive] = useState(false);
     const inputRef = useRef();
 
@@ -27,7 +27,7 @@ export default function SearchBar({ className }) {
                 )}
             />
             <input 
-                placeholder={'search for a response...'}
+                placeholder={placeholder}
                 className={classNames(
                     'w-11/12 bg-light-gray',
                     searchActive ? 'mx-3' : '',
@@ -35,6 +35,7 @@ export default function SearchBar({ className }) {
                 )}
                 ref={inputRef}
                 onBlur={() => setSearchActive(false)}
+                onChange={e => onChange(e.target.value)}
             />
         </Container>
     )
