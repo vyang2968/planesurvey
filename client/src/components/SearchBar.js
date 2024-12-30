@@ -5,8 +5,7 @@ import { useRef, useState } from "react";
 import classNames from "classnames";
 
 
-export default function SearchBar({ className, placeholder, onChange }) {
-    const [searchActive, setSearchActive] = useState(false);
+export default function SearchBar({ className, placeholder, onChange, onSearchActive, searchActive }) {
     const inputRef = useRef();
 
     return(
@@ -16,7 +15,7 @@ export default function SearchBar({ className, placeholder, onChange }) {
             )}
             onClick={() => {
                 inputRef.current.focus()
-                setSearchActive(true)
+                onSearchActive(true)
             }}
         >
             <FontAwesomeIcon 
@@ -31,10 +30,10 @@ export default function SearchBar({ className, placeholder, onChange }) {
                 className={classNames(
                     'w-11/12 bg-light-gray',
                     searchActive ? 'mx-3' : '',
-                    'outline-none'  
+                    'outline-none'
                 )}
                 ref={inputRef}
-                onBlur={() => setSearchActive(false)}
+                onBlur={() => onSearchActive(false)}
                 onChange={e => onChange(e.target.value)}
             />
         </Container>

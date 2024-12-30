@@ -28,7 +28,7 @@ const CustomDropdown = ({ className, placeholder, items, onChange}) => {
           onClick={() => setIsOpen(!isOpen)}
           className='w-full py-2'
         >
-          {activeItem}
+          {processText(activeItem)}
         </button>
         
         {isOpen && (
