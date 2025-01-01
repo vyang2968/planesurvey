@@ -8,11 +8,11 @@ export default function CustomPagination({ className, resource, pagesPerView, on
     const buttonStyling = "flex justify-center items-center h-1/4 aspect-square p-3 bg-blue-300 text-lg"
     const [activePage, setActivePage] = useState(1)
 
-    // useEffect(() => {
-    //     if (onChange) {
-    //         onChange(activePage);
-    //     }
-    // }, [activePage, onChange]);
+    useEffect(() => {
+        if (onChange) {
+            onChange(activePage);
+        }
+    }, [activePage, onChange]);
 
     if (!resource) {
         return <div></div>

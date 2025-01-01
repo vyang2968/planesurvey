@@ -28,33 +28,48 @@ const promiseWrapper = (promise) => {
 export default function useFetchData(url, params) {
     const [error, setError] = useState(null);
     const [resource, setResource] = useState(null);
+
+    // Memoize params to avoid unnecessary re-fetching
     const stableParams = useMemo(() => JSON.stringify(params), [params]);
 
+    // Function to introduce delay in fetching resource
+    const fetchWithDelay = (promise, delay) => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                promise.then(resolve).catch(reject);
+            }, delay);
+        });
+    };
+
+    // Fetch data when params change
     const fetchResource = useCallback(() => {
         setError(null); // Clear any previous error before a new request
 
-        // Start the Axios request
-        const promise = axios.get(url, {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true,
-            params: JSON.parse(stableParams), // Use stringified params
-        }).then((res) => {
-            // Handle successful request
-                setResource(res.data);
-            // return new Promise(() => setTimeout(res, 1000000))
-        }).catch((err) => {
-            // Handle network error or any other Axios error
-            setError(err); // Store error in state
-            throw err; // Throw the error to be caught by ErrorBoundary
-        });
+        const promise = axios
+            .get(url, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+                params: JSON.parse(stableParams), // Use stringified params
+            })
+            .then((res) => {
+                return res.data; // Directly return the data
+            })
+            .catch((err) => {
+                setError(err); // Store error in state
+                throw err; // Throw the error to be caught by ErrorBoundary
+            });
 
-        // Return the promise wrapped for Suspense
-        return promiseWrapper(promise);
+        // Wrap the axios promise with a delay
+        return promiseWrapper(fetchWithDelay(promise, 300)); // Delay 300ms before resolving the promise
     }, [url, stableParams]);
 
-    // If resource hasn't been fetched, use initialResource
-    const initialResource = useMemo(() => fetchResource(), [fetchResource]);
+    // Trigger resource fetch if not already done
+    const resourceWrapper = useMemo(() => {
+        if (!resource) {
+            return fetchResource(); // Only fetch if resource is null
+        }
+        return promiseWrapper(Promise.resolve(resource)); // Use the already fetched data
+    }, [fetchResource, resource]);
 
-    // Return wrapped resource for Suspense to handle
-    return [resource ? promiseWrapper(Promise.resolve(resource)) : initialResource, fetchResource, error];
+    return [resourceWrapper, fetchResource, error];
 }

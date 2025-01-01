@@ -24,7 +24,7 @@ export default function Search() {
     const [activePage, setActivePage] = useState(1)
     const [searchActive, setSearchActive] = useState(false)
 
-    const pagesPerView = 3;
+    const pagesPerView = window.innerWidth >= 640 ? 3 : 2;
 
     const [resource, fetchResource, error] = useFetchData(
         'http://localhost:8080/responses/search',
@@ -33,36 +33,9 @@ export default function Search() {
             value: searchBarText,
             page: activePage - 1,
             size: pagesPerView,
-            direction: 'asc', // example, you can replace with `sortActive`
+            direction: sortActive
         }
     );
-
-    // const handleSearchChange = useCallback((value) => {
-    //     startTransition(() => {
-    //         setSearchBarText(value);
-    //         setActivePage(1);
-    //     //     fetchResource({
-    //     //         field: filterByActive,
-    //     //         value: value,
-    //     //         page: 0,
-    //     //         size: pagesPerView,
-    //     //         direction: sortActive,
-    //     //     });
-    //     // });
-    // }, [filterByActive, sortActive]);
-
-    // const handlePageChange = useCallback((newPage) => {
-    //     startTransition(() => {
-    //         setActivePage(newPage);
-    //         fetchResource({
-    //             field: filterByActive,
-    //             value: searchBarText,
-    //             page: newPage,
-    //             size: pagesPerView,
-    //             direction: sortActive,
-    //         });
-    //     });
-    // }, [filterByActive, searchBarText, pagesPerView, sortActive, fetchResource]);
 
     return (
         <>
@@ -93,7 +66,10 @@ export default function Search() {
                                     <SearchBar
                                         className='w-full h-full flex items-center px-1'
                                         placeholder='search for a response...'
-                                        onChange={(text) => setSearchBarText(text)}
+                                        onChange={(text) => {
+                                            setSearchBarText(text)
+                                            setActivePage(1)
+                                        }}
                                         onSearchActive={(active) => setSearchActive(active)}
                                         searchActive={searchActive}
                                     />
@@ -132,7 +108,7 @@ export default function Search() {
                                                 <CustomPagination 
                                                     resource={resource}
                                                     pagesPerView={pagesPerView}
-                                                    onChange={''}
+                                                    onChange={(page) => setActivePage(page)}
                                                     className='w-full sm:w-2/3 flex m-auto'
                                                 />
                                             </Suspense>

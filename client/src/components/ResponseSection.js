@@ -41,10 +41,10 @@ export default function ResponseSection({ resource, className, pagesPerView }) {
                 </div>
             ))}
             {dataLength > 0 
-                ? Array.from({ length: pagesPerView - dataLength - 1 }, (_, index) => (
-                <div key={index} className='w-full h-[20dvh]'></div>
+                ? Array.from({ length: pagesPerView - dataLength }, (_, index) => (
+                <div key={index} className='w-full h-[25dvh]'></div>
                 )) : <div 
-                        className='w-full my-auto flex justify-center items-center'
+                        className='w-full h-[55dvh] my-auto flex justify-center items-center'
                     >
                         <p className="text-lg font-semibold">No items found &nbsp;</p><FontAwesomeIcon icon={faFaceFrown} size="xl"/>
                     </div>}
