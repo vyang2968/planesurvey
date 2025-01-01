@@ -40,7 +40,8 @@ export default function useFetchData(url, params) {
             params: JSON.parse(stableParams), // Use stringified params
         }).then((res) => {
             // Handle successful request
-            setResource(res.data);
+                setResource(res.data);
+            // return new Promise(() => setTimeout(res, 1000000))
         }).catch((err) => {
             // Handle network error or any other Axios error
             setError(err); // Store error in state

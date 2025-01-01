@@ -21,7 +21,7 @@ export default function SearchBar({ className, placeholder, onChange, onSearchAc
             <FontAwesomeIcon 
                 icon={faMagnifyingGlass} 
                 className={classNames(
-                    'w-1/12 hover:cursor-pointer',
+                    'w-1/12 hover:cursor-pointer mx-1 sm:m-0',
                     searchActive ? 'hidden' : ''
                 )}
             />

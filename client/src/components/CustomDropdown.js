@@ -26,7 +26,7 @@ const CustomDropdown = ({ className, placeholder, items, onChange}) => {
       >
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className='w-full py-2'
+          className='w-full h-full overflow-hidden text-clip'
         >
           {processText(activeItem)}
         </button>
@@ -35,12 +35,12 @@ const CustomDropdown = ({ className, placeholder, items, onChange}) => {
           <div className={classNames(
             'absolute mt-2 transform -translate-x-1/2 left-1/2',
             'flex flex-col text-center shadow-lg py-1.5',
-            'min-w-full whitespace-nowrap rounded-lg bg-white'
+            'min-w-full whitespace-nowrap rounded-lg bg-white z-10'
           )}>
             {items.map((item, index) => (
               <button
                 key={index}
-                className="transition-colors w-full py-2 hover:bg-blue-300/50 text-xs"
+                className="transition-colors w-full p-2 hover:bg-blue-300/50 text-xs"
                 onClick={() => {
                   setIsOpen(false)
                   onChange(item)
