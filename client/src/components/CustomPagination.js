@@ -20,7 +20,7 @@ export default function CustomPagination({ className, resource, pagesPerView, on
 
     const endPage = Math.ceil(resource.read().totalElements / pagesPerView);
 
-    if (endPage == 0) {
+    if (endPage === 0) {
         return <div></div>
     }
 

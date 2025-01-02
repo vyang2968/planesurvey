@@ -71,7 +71,7 @@ function Survey() {
         ref.current.continuousStart(30, 150);
         
         axios.post(
-            'http://localhost:8080/responses/create',
+            '/responses/create',
             data,
             { 
                 headers: { 'Content-Type': 'application/json' },
