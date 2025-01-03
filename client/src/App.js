@@ -1,5 +1,4 @@
-import logo from './logo.svg';
-import {Survey} from './pages'
+import Survey from './pages/survey/Survey'
 import { HelmetProvider } from 'react-helmet-async';
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
 import Submitted from './pages/submitted/Submitted';

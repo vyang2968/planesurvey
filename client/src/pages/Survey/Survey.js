@@ -73,8 +73,12 @@ function Survey() {
         axios.post(
             '/responses/create',
             data,
-            { 
-                headers: { 'Content-Type': 'application/json' },
+            {
+                baseURL: process.env.REACT_APP_BASE_URL,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'API-KEY': process.env.REACT_APP_API_KEY
+                },
                 withCredentials: true 
             }
         )

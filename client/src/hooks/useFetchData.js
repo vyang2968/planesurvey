@@ -25,7 +25,7 @@ const promiseWrapper = (promise) => {
     };
 };
 
-export default function useFetchData(url, params) {
+export default function useFetchData(url, params, baseURL) {
     const [error, setError] = useState(null);
     const [resource, setResource] = useState(null);
 
@@ -47,7 +47,11 @@ export default function useFetchData(url, params) {
 
         const promise = axios
             .get(url, {
-                headers: { "Content-Type": "application/json" },
+                baseURL: baseURL,
+                headers: {
+                    "Content-Type": "application/json",
+                    "API-KEY": process.env.REACT_APP_API_KEY
+                },
                 withCredentials: true,
                 params: JSON.parse(stableParams), // Use stringified params
             })

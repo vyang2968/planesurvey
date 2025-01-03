@@ -10,6 +10,7 @@ import ResponseSectionFallback from '../../components/ResponseSectionFallback'
 import { ErrorBoundary } from 'react-error-boundary'
 import ErrorFallback from '../../components/ErrorFallback'
 import { Helmet } from 'react-helmet-async'
+import axios from 'axios'
 
 export default function Search() {
     const filterCategories = ['firstName', 'lastName', 'email', 'age', 'manufacturer', 'airlines', 'response']
@@ -25,7 +26,6 @@ export default function Search() {
     const [searchActive, setSearchActive] = useState(false)
 
     const pagesPerView = window.innerWidth >= 640 ? 3 : 2;
-
     const [resource, fetchResource, error] = useFetchData(
         '/responses/search',
         {
@@ -34,7 +34,8 @@ export default function Search() {
             page: activePage - 1,
             size: pagesPerView,
             direction: sortActive
-        }
+        },
+        process.env.REACT_APP_BASE_URL
     );
 
     return (
