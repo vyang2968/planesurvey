@@ -28,9 +28,10 @@ export default function ResponseSection({ resource, className, pagesPerView }) {
                 <div key={index} className='w-full h-1/3 flex flex-col gap-y-1 lg:grid lg:grid-cols-2 grid-flow-row p-6'>
                     {
                         Object.entries(response).map(([key, value], subIndex) => {
+                            let formattedKey = key
                             if (key !== 'id') {
-                                key = key.replace(/([A-Z])/g, " $1");
-                                key = key.charAt(0).toUpperCase() + key.slice(1);
+                                formattedKey = formattedKey.replace(/([A-Z])/g, " $1");
+                                formattedKey = formattedKey.charAt(0).toUpperCase() + formattedKey.slice(1);
                                 return (
                                     <div
                                         key={subIndex}
