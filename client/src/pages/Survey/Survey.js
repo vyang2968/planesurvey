@@ -5,7 +5,7 @@ import { useRef, useState } from 'react';
 import { Button, Card, Container, Form } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { Controller, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import Select from 'react-select';
 import LoadingBar from 'react-top-loading-bar';
 import { array, number, object, string } from 'yup';

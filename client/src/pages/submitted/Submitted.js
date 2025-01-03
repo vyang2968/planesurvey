@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { Card, Container, Image } from 'react-bootstrap'
 import { Helmet } from 'react-helmet-async'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import plane from '../../assets/checkplane.png'
 
 export default function Submitted() {

@@ -1,6 +1,6 @@
 import Survey from './pages/survey/Survey'
 import { HelmetProvider } from 'react-helmet-async';
-import { Routes, Route, BrowserRouter } from 'react-router-dom'
+import { Routes, Route, BrowserRouter } from 'react-router'
 import Submitted from './pages/submitted/Submitted';
 import Search from './pages/search/Search'
 
