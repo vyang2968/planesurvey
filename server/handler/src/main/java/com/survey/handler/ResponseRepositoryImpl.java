@@ -29,6 +29,7 @@ import com.mongodb.client.model.search.SearchPath;
 
 @Repository
 public class ResponseRepositoryImpl implements ResponseRepository {
+    private static final int MIN_STARS = 5;
     @Autowired
     private MongoTemplate template;
 
@@ -68,8 +69,8 @@ public class ResponseRepositoryImpl implements ResponseRepository {
             Response response = new Response(
                     (ObjectId) document.get("_id"),
                     document.getString("firstName"),
-                    document.getString("lastName"),
-                    document.getString("email"),
+                    obfuscateLastName(document.getString("lastName")),
+                    obfuscateEmail(document.getString("email")),
                     document.getInteger("age"),
                     document.getString("manufacturer"),
                     document.getString("airplane"),
@@ -107,4 +108,19 @@ public class ResponseRepositoryImpl implements ResponseRepository {
                 () -> template.count(Query.query(Criteria.where(field).exists(true)), Response.class));
     }
 
+    private String obfuscateEmail(String email) {
+        int symbolIndex = email.indexOf("@");
+        String local = email.substring(0, symbolIndex);
+        String domain = email.substring(symbolIndex, email.length() - 1);
+        int randomLength = (int) (Math.random() * local.length());
+
+        String stars = "*".repeat(randomLength > 0 ? randomLength : MIN_STARS);
+
+        return email.substring(0, 1).concat(stars).concat(domain);
+    }
+
+    private String obfuscateLastName(String lastName) {
+        String stars = "*".repeat(lastName.length() - 1);
+        return lastName.substring(0, 1).concat(stars);
+    }
 }
