@@ -11,7 +11,7 @@ export default function Submitted() {
                 <title>Plane Survey</title>
                 <meta name='description' content='survey for everything aviation related' />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                <link rel="shortcut icon" type="image/png" href={''} />
+                <link rel="icon" href={'../../../public/favicon.ico'} />
             </Helmet>
             <Container className='min-w-dvw w-dvw min-h-dvh h-dvh flex items-center justify-center bg-soft-gray text-charcoal'>
                 <Card className='w-3/5 h-2/5 sm:h-3/5 flex flex-col justify-center items-center bg-white rounded-xl'>

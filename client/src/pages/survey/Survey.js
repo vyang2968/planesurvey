@@ -109,7 +109,7 @@ function Survey() {
                 <title>Plane Survey</title>
                 <meta name='description' content='survey for everything aviation related' />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                <link rel="shortcut icon" type="image/png" href={''} />
+                <link rel="icon" href={'../../../public/favicon.ico'} />
             </Helmet>
             <LoadingBar
                 ref={ref}
