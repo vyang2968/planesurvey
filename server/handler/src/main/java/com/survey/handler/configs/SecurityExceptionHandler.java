@@ -12,10 +12,9 @@ public class SecurityExceptionHandler {
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<APIError> handleAuthenticationException(AuthenticationException ex) {
         APIError error = new APIError(
-            HttpStatus.UNAUTHORIZED.value(),
-            "Authentication failed",
-            ex.getMessage()
-        );
+                HttpStatus.UNAUTHORIZED.value(),
+                "Authentication failed",
+                ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
@@ -23,7 +22,7 @@ public class SecurityExceptionHandler {
         private final int status;
         private final String message;
         private final String details;
-    
+
         public APIError(int status, String message, String details) {
             this.status = status;
             this.message = message;
@@ -31,5 +30,3 @@ public class SecurityExceptionHandler {
         }
     }
 }
-
-

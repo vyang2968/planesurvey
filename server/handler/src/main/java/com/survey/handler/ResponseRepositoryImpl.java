@@ -51,12 +51,15 @@ public class ResponseRepositoryImpl implements ResponseRepository {
                         SearchOperator.autocomplete(
                                 SearchPath.fieldPath(field),
                                 List.of(value))
-                                .fuzzy(FuzzySearchOptions.fuzzySearchOptions().maxEdits(1).prefixLength(1))),
+                                .fuzzy(FuzzySearchOptions.fuzzySearchOptions()
+                                        .maxEdits(1).prefixLength(1))),
                 Aggregates.sort(
-                        pageable.getSort().getOrderFor(field).getDirection().equals(Direction.ASC)
-                                ? Sorts.ascending(field)
-                                : Sorts.descending(field)),
-                Aggregates.skip(pageable.getPageNumber() * pageable.getPageSize()), // pagination function
+                        pageable.getSort().getOrderFor(field).getDirection()
+                                .equals(Direction.ASC)
+                                        ? Sorts.ascending(field)
+                                        : Sorts.descending(field)),
+                Aggregates.skip(pageable.getPageNumber() * pageable.getPageSize()), // pagination
+                // function
                 Aggregates.limit(pageable.getPageSize())); // limit to only the desired page size
 
         AggregateIterable<Document> aggregateResults = collection.aggregate(searchPipeline);
@@ -101,8 +104,7 @@ public class ResponseRepositoryImpl implements ResponseRepository {
         return PageableExecutionUtils.getPage(
                 list,
                 pageable,
-                () -> template.count(Query.query(Criteria.where(field).exists(true)), Response.class)
-        );
+                () -> template.count(Query.query(Criteria.where(field).exists(true)), Response.class));
     }
 
 }

@@ -16,9 +16,10 @@ public class ResponseService {
         return repository.createResponse(response);
     }
 
-    public Page<Response> getResponsePageByQuery(@NonNull String field, @NonNull String value, @NonNull Pageable pageable) {
-        return value.isEmpty() 
-            ? repository.getAllResponses(field, pageable) 
-            : repository.getAllResponsesOfQuery(field, value, pageable);
+    public Page<Response> getResponsePageByQuery(@NonNull String field, @NonNull String value,
+            @NonNull Pageable pageable) {
+        return value.isEmpty()
+                ? repository.getAllResponses(field, pageable)
+                : repository.getAllResponsesOfQuery(field, value, pageable);
     }
 }
