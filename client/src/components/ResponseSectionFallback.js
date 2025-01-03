@@ -8,7 +8,7 @@ export default function ResponseSectionFallback({ numSections, numFields, classN
             {Array.from({ length: numSections }, (_, index) => (
                 <div
                     key={index}
-                    className="w-full h-auto grid grid-cols-2 gap-y-[1dvh] sm:gap-y-[1.5dvh]"
+                    className="w-full h-full flex flex-col justify-evenly gap-y-1 lg:grid lg:grid-cols-2 lg:grid-flow-row py-4"
                 >
                     {Array.from({ length: numFields }, (_, index) => (
                         <div

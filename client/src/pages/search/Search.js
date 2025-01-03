@@ -1,5 +1,6 @@
 import classNames from 'classnames'
-import { Suspense, useState } from 'react'
+import { Suspense, useState, useMemo, useCallback, useEffect } from 'react'
+import useDebounce from '../../hooks/useDebounce'
 import { Card, Container } from 'react-bootstrap'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Helmet } from 'react-helmet-async'
@@ -24,18 +25,43 @@ export default function Search() {
     const [activePage, setActivePage] = useState(1)
     const [searchActive, setSearchActive] = useState(false)
 
-    const pagesPerView = window.innerWidth >= 640 ? 3 : 2;
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    
+    useEffect(() => {
+        function handleResize() {
+            setWindowWidth(window.innerWidth);
+        }
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    const pagesPerView = useMemo(() => 
+        windowWidth >= 640 ? 3 : 2, 
+        [windowWidth]
+    );
+
+    const debouncedText = useDebounce(searchBarText, 75);
+
     const [resource, fetchResource, error] = useFetchData(
         '/responses/search',
         {
             field: filterByActive,
-            value: searchBarText,
+            value: debouncedText,
             page: activePage - 1,
             size: pagesPerView,
             direction: sortActive
         },
         process.env.REACT_APP_BASE_URL
     );
+
+    const handlePageChange = useCallback((newPage) => {
+        setActivePage(newPage);
+        fetchResource();
+    }, [fetchResource]);
 
     return (
         <>
@@ -52,35 +78,32 @@ export default function Search() {
                     'before:bg-white before:opacity-60'
                 )}
             >
-                <Card className='w-4/5 sm:w-3/5 sm:min-h-[90dvh] h-auto my-[5dvh] flex flex-col justify-center items-center bg-soft-gray rounded-xl'>
+                <Card className='w-4/5 md:w-3/5 md:min-h-[90dvh] h-auto my-[5dvh] flex flex-col justify-center items-center bg-soft-gray rounded-xl'>
                     <Container className='w-5/6 my-[5dvh] flex flex-col justify-between items-center'>
-                        <Container className='w-full mb-[3dvh] flex flex-col gap-y-1 sm:gap-y-[1dvh]'>
-                            <Card.Title className='w-full text-3xl sm:text-5xl font-bold text-indigo text-center'>Responses Search</Card.Title>
+                        <Container className='w-full mb-[3dvh] flex flex-col gap-y-1 md:gap-y-[1dvh]'>
+                            <Card.Title className='w-full text-4xl sm:text-5xl font-bold text-indigo text-center'>Responses Search</Card.Title>
                             <Card.Subtitle className='w-full text-xs sm:text-base text-center'>Type in the search bar to find responses</Card.Subtitle>
                         </Container>
                         <Card.Body className='w-full h-auto flex flex-col justify-between'>
                             <Container className={classNames(
-                                'w-full h-[4dvh] sm:h-[5dvh] flex items-center bg-light-gray rounded-xl divide-x-2 text-xs sm:text-base',
+                                'w-full h-[4dvh] md:h-[5dvh] flex items-center bg-light-gray rounded-xl divide-x-2 text-xs md:text-base',
                                 searchActive ? 'ring-blue-300 ring ring-2' : ''
                             )}>
                                 <SearchBar
                                     className='w-full h-full flex items-center px-1'
                                     placeholder='search for a response...'
-                                    onChange={(text) => {
-                                        setSearchBarText(text)
-                                        setActivePage(1)
-                                    }}
+                                    onChange={(text) => setSearchBarText(text)}
                                     onSearchActive={(active) => setSearchActive(active)}
                                     searchActive={searchActive}
                                 />
                                 <CustomDropdown
-                                    className='w-1/6 h-full px-2 sm:m-0'
+                                    className='w-1/6 h-full px-2 md:m-0'
                                     placeholder={filterByDefaultText}
                                     items={filterCategories}
                                     onChange={(active) => setFilterByActive(active)}
                                 />
                                 <CustomDropdown
-                                    className='w-1/6 h-full px-2'
+                                    className='w-1/6 h-full px-2 md:m-0'
                                     placeholder={sortDefaultText}
                                     items={['asc', 'desc']}
                                     onChange={(active) => setSortActive(active)}
@@ -98,14 +121,14 @@ export default function Search() {
                                             <ResponseSectionFallback
                                                 numSections={pagesPerView}
                                                 numFields={filterCategories.length}
-                                                className='w-5/6 sm:w-11/12 h-[55dvh] flex flex-col justify-around'
+                                                className='w-5/6 md:w-11/12 h-[55dvh] flex flex-col justify-around my-4'
                                             />
                                         }
                                     >
                                         <ResponseSection
                                             resource={resource}
                                             pagesPerView={pagesPerView}
-                                            className='w-full h-auto divide-y-2 text-sm sm:text-base'
+                                            className='w-full h-auto divide-y-2 text-sm md:text-base'
                                         />
                                     </Suspense>
                                 </Container>
@@ -113,7 +136,8 @@ export default function Search() {
                                     <CustomPagination
                                         resource={resource}
                                         pagesPerView={pagesPerView}
-                                        onChange={(page) => setActivePage(page)}
+                                        onChange={(page) => handlePageChange(page)}
+                                        currentPage={activePage}
                                         className='w-full sm:w-2/3 flex m-auto'
                                     />
                                 </Suspense>

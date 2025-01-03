@@ -13,14 +13,14 @@ export default function Submitted() {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <link rel="shortcut icon" type="image/png" href={''} />
             </Helmet>
-            <Container className='w-dvw h-dvh flex items-center justify-center bg-soft-gray text-charcoal'>
-                <Card className='w-3/5 h-3/5 bg-white rounded-lg shadow-lg flex items-center flex-col' >
-                    <Container className='h-full w-4/5 flex flex-col items-center justify-center'>
-                        <Image src={plane} className='w-1/2 sm:w-3/4 xl:w-1/2 lg:w-1/2' />
-                        <h1 className='text-sm md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl w-fit mb-[3%]'>Thanks for your response!</h1>
+            <Container className='min-w-dvw w-dvw min-h-dvh h-dvh flex items-center justify-center bg-soft-gray text-charcoal'>
+                <Card className='w-3/5 h-2/5 sm:h-3/5 flex flex-col justify-center items-center bg-white rounded-xl'>
+                    <Container className='w-5/6 sm:w-2/3 lg:w-3/5 h-fit flex flex-col items-center'>
+                        <Image src={plane} className='w-5/6 lg:w-2/3' />
+                        <h1 className='text-md text-center sm:text-[2.5dvw] font-bold'>Thanks for your response!</h1>
                         <Link
                             className={classNames(
-                                'p-[3%] lg:p-[2%] bg-indigo w-fit h-fit rounded-lg font-medium text-white shadow-md text-xs md:text-lg',
+                                'w-fit h-fit p-2 sm:p-4 m-[2dvh] bg-indigo text-white rounded-lg text-sm lg:text-[1.5dvw]',
                                 'active:brightness-[90%] hover:brightness-125'
                             )}
                             to={'/search'}

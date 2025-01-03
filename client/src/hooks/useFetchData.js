@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { useCallback, useMemo, useState } from 'react';
 
-// Wrapper to handle the async state for Suspense
-const promiseWrapper = (promise) => {
+const promiseWrapper = (promise, delay = 0) => {
     let status = "pending";
     let result;
     let suspender = promise.then(
-        (res) => {
+        async (res) => {
+            await new Promise((resolve) => setTimeout(resolve, delay));
             status = "success";
             result = res?.data ?? res;
         },
@@ -21,7 +21,7 @@ const promiseWrapper = (promise) => {
             if (status === "pending") throw suspender;
             if (status === "error") throw result;
             return result;
-        }
+        },
     };
 };
 
@@ -29,51 +29,30 @@ export default function useFetchData(url, params, baseURL) {
     const [error, setError] = useState(null);
     const [resource, setResource] = useState(null);
 
-    // Memoize params to avoid unnecessary re-fetching
-    const stableParams = useMemo(() => JSON.stringify(params), [params]);
+    const stableParams = useMemo(() => params, [JSON.stringify(params)]);
 
-    // Function to introduce delay in fetching resource
-    const fetchWithDelay = (promise, delay) => {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                promise.then(resolve).catch(reject);
-            }, delay);
-        });
-    };
-
-    // Fetch data when params change
     const fetchResource = useCallback(() => {
-        setError(null); // Clear any previous error before a new request
+        setError(null);
+        const promise = axios.get(url, {
+            baseURL: baseURL,
+            headers: {
+                "Content-Type": "application/json",
+                "API-KEY": process.env.REACT_APP_API_KEY,
+            },
+            withCredentials: true,
+            params: stableParams,
+        });
 
-        const promise = axios
-            .get(url, {
-                baseURL: baseURL,
-                headers: {
-                    "Content-Type": "application/json",
-                    "API-KEY": process.env.REACT_APP_API_KEY
-                },
-                withCredentials: true,
-                params: JSON.parse(stableParams), // Use stringified params
-            })
-            .then((res) => {
-                setResource(res.data);
-            })
-            .catch((err) => {
-                setError(err); // Store error in state
-                throw err; // Throw the error to be caught by ErrorBoundary
-            });
+        const wrappedPromise = promiseWrapper(promise, 300);
 
-        // Wrap the axios promise with a delay
-        return promiseWrapper(fetchWithDelay(promise, 300)); // Delay 300ms before resolving the promise
+        promise
+            .then((res) => setResource(res.data))
+            .catch((err) => setError(err));
+
+        return wrappedPromise;
     }, [url, stableParams, baseURL]);
 
-    // Trigger resource fetch if not already done
-    const resourceWrapper = useMemo(() => {
-        if (!resource) {
-            return fetchResource(); // Only fetch if resource is null
-        }
-        return promiseWrapper(Promise.resolve(resource)); // Use the already fetched data
-    }, [fetchResource, resource]);
+    const resourceWrapper = useMemo(() => fetchResource(), [fetchResource]);
 
     return [resourceWrapper, fetchResource, error];
 }

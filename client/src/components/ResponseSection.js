@@ -4,14 +4,13 @@ import classNames from "classnames";
 import { Container } from "react-bootstrap";
 
 export default function ResponseSection({ resource, className, pagesPerView }) {
-    console.log(resource)
     console.log(resource.read())
     const data = resource.read().content
     const dataLength = data.length
     return (
         <Container className={className}>
             {data.map((response, index) => (
-                <div key={index} className='w-full h-1/3 flex flex-col gap-y-1 sm:grid sm:grid-cols-2 grid-flow-row p-6'>
+                <div key={index} className='w-full h-1/3 flex flex-col gap-y-1 lg:grid lg:grid-cols-2 grid-flow-row p-6'>
                     {
                         Object.entries(response).map(([key, value], subIndex) => {
                             if (key !== 'id') {
@@ -36,7 +35,7 @@ export default function ResponseSection({ resource, className, pagesPerView }) {
                                     </div>
                                 )
                             }
-                            return (<div></div>)
+                            return (<></>)
                         })}
                 </div>
             ))}

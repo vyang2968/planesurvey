@@ -25,9 +25,11 @@ const CustomDropdown = ({ className, placeholder, items, onChange }) => {
         >
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className='w-full h-full overflow-hidden text-clip'
+                className='w-full h-full flex justify-center items-center'
             >
-                {processText(activeItem)}
+                <p className='w-full flex justify-start sm:justify-center items-center overflow-hidden text-clip text-center text-[1.2dvh] lg:text-sm leading-snug'>
+                    {processText(activeItem)}
+                </p>
             </button>
 
             {isOpen && (

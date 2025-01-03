@@ -37,7 +37,7 @@ function Survey() {
     const inputStyle = 'w-full px-2 h-3/5 rounded-lg text-xs lg:text-base outline-none border-none ring-none hover:ring-blue-300 hover:ring hover:ring-2 focus:placeholder-opacity-100 bg-light-gray shadow-sm'
     const boxErrorStyle = 'ring-red-600 ring ring-2';
     const inputErrorStyle = inputStyle + ' ' + boxErrorStyle;
-    const errorStyle = 'w-full h-3 text-red-600 text-[0.5em] lg:text-xs pt-0.2 lg:pt-0.5 italic'
+    const errorStyle = 'w-full h-fit text-red-600 text-[0.5em] mb-2 pt-1 lg:text-xs lg:pt-0.5 italic leading-none'
 
     const schema = object().shape({
         firstName: string().required('empty field').min(1, 'must be at least 1'),
@@ -69,6 +69,7 @@ function Survey() {
     const onSubmit = (data) => {
         setIsSubmitting(true);
         ref.current.continuousStart(30, 150);
+
 
         axios.post(
             '/responses/create',
@@ -249,12 +250,12 @@ function Survey() {
                                                     <Form.Check
                                                         id='airbus'
                                                         className='flex items-center w-fit hover:cursor-pointer'
-                                                        value='airbus'
+                                                        value='Airbus'
                                                         name='manufacturer'
                                                     >
                                                         <Form.Check.Input
                                                             type='radio'
-                                                            value='airbus'
+                                                            value='Airbus'
                                                             className={
                                                                 classNames(
                                                                     'appearance-none h-4 w-4 rounded-full p-1 border-[3px] border-soft-gray bg-soft-gray',
@@ -266,7 +267,7 @@ function Survey() {
                                                             onChange={e => onChange(e.target.value)}
                                                             ref={ref}
                                                             name='manufacturer'
-                                                            checked={value === 'airbus'}
+                                                            checked={value === 'Airbus'}
                                                         />
                                                         <Form.Check.Label className='ml-2 font-normal hover:cursor-pointer'>
                                                             Airbus
@@ -275,12 +276,12 @@ function Survey() {
                                                     <Form.Check
                                                         id='boeing'
                                                         className='flex items-center w-fit hover:cursor-pointer'
-                                                        value='airbus'
-                                                        name='boeing'
+                                                        value='Boeing'
+                                                        name='manufacturer'
                                                     >
                                                         <Form.Check.Input
                                                             type='radio'
-                                                            value='boeing'
+                                                            value='Boeing'
                                                             className={
                                                                 classNames(
                                                                     'appearance-none h-4 w-4 rounded-full p-1 border-[3px] border-soft-gray bg-soft-gray',
@@ -291,7 +292,7 @@ function Survey() {
                                                             onChange={e => onChange(e.target.value)}
                                                             ref={ref}
                                                             name='manufacturer'
-                                                            checked={value === 'boeing'}
+                                                            checked={value === 'Boeing'}
                                                         />
                                                         <Form.Check.Label className='ml-2 font-normal hover:cursor-pointer'>
                                                             Boeing
