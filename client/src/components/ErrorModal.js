@@ -7,22 +7,22 @@ export default function ErrorModal({ isOpen, onClose, className }) {
     if (!isOpen) {
         return null;
     }
-    
+
     return (
         <Portal className={className}>
-                <div className="w-full h-full fixed inset-0 bg-black opacity-70 z-50"></div>
-                <div className="w-full h-full fixed top-1/2 left-1/2 z-50">
-                    <Container className='w-5/12 h-auto translate-x-[-50%] translate-y-[-50%] flex justify-center items-center bg-white rounded-lg'>
-                        <div className='w-full h-full flex flex-col justify-space-between items-center py-10 gap-y-6 text-charcoal'>
-                            <FontAwesomeIcon icon={faPlaneCircleXmark} size='5x' className='text-black'/>
-                            <div className='text-center'>
-                                <h1 className='text-3xl font-bold text-indigo'>Error</h1>
-                                <p>Oops, something went wrong. Please try again.</p>
-                            </div>
-                            <button className='w-1/6 py-2 bg-indigo text-white rounded-lg text-bold' onClick={onClose}>Close</button>
+            <div className="w-full h-full fixed inset-0 bg-black opacity-70 z-50"></div>
+            <div className="w-full h-full fixed top-1/2 left-1/2 z-50">
+                <Container className='w-5/12 h-auto translate-x-[-50%] translate-y-[-50%] flex justify-center items-center bg-white rounded-lg'>
+                    <div className='w-full h-full flex flex-col justify-space-between items-center py-10 gap-y-6 text-charcoal'>
+                        <FontAwesomeIcon icon={faPlaneCircleXmark} size='5x' className='text-black' />
+                        <div className='text-center'>
+                            <h1 className='text-3xl font-bold text-indigo'>Error</h1>
+                            <p>Oops, something went wrong. Please try again.</p>
                         </div>
-                    </Container>
-                </div>
+                        <button className='w-1/6 py-2 bg-indigo text-white rounded-lg text-bold' onClick={onClose}>Close</button>
+                    </div>
+                </Container>
+            </div>
         </Portal>
     )
 }

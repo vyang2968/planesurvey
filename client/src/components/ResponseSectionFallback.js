@@ -6,12 +6,12 @@ export default function ResponseSectionFallback({ numSections, numFields, classN
             className={className}
         >
             {Array.from({ length: numSections }, (_, index) => (
-                <div 
-                    key={index} 
+                <div
+                    key={index}
                     className="w-full h-auto grid grid-cols-2 gap-y-[1dvh] sm:gap-y-[1.5dvh]"
                 >
                     {Array.from({ length: numFields }, (_, index) => (
-                        <div 
+                        <div
                             key={index}
                             className={classNames(
                                 'animate-pulse h-3 bg-soft-gray rounded-xl',

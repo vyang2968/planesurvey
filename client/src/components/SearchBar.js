@@ -1,14 +1,14 @@
-import { Container } from "react-bootstrap";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import { useRef, useState } from "react";
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from "classnames";
+import { useRef } from "react";
+import { Container } from "react-bootstrap";
 
 
 export default function SearchBar({ className, placeholder, onChange, onSearchActive, searchActive }) {
     const inputRef = useRef();
 
-    return(
+    return (
         <Container
             className={classNames(
                 className,
@@ -18,14 +18,14 @@ export default function SearchBar({ className, placeholder, onChange, onSearchAc
                 onSearchActive(true)
             }}
         >
-            <FontAwesomeIcon 
-                icon={faMagnifyingGlass} 
+            <FontAwesomeIcon
+                icon={faMagnifyingGlass}
                 className={classNames(
                     'w-1/12 hover:cursor-pointer mx-1 sm:m-0',
                     searchActive ? 'hidden' : ''
                 )}
             />
-            <input 
+            <input
                 placeholder={placeholder}
                 className={classNames(
                     'w-11/12 bg-light-gray',

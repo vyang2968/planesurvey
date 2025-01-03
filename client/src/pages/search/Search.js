@@ -1,16 +1,15 @@
-import { Container, Card } from 'react-bootstrap'
 import classNames from 'classnames'
-import SearchBar from '../../components/SearchBar'
-import CustomDropdown from '../../components/CustomDropdown'
-import { Suspense, useState, useCallback, startTransition, useEffect } from 'react'
-import CustomPagination from '../../components/CustomPagination'
-import ResponseSection from '../../components/ResponseSection'
-import useFetchData from '../../hooks/useFetchData'
-import ResponseSectionFallback from '../../components/ResponseSectionFallback'
+import { Suspense, useState } from 'react'
+import { Card, Container } from 'react-bootstrap'
 import { ErrorBoundary } from 'react-error-boundary'
-import ErrorFallback from '../../components/ErrorFallback'
 import { Helmet } from 'react-helmet-async'
-import axios from 'axios'
+import CustomDropdown from '../../components/CustomDropdown'
+import CustomPagination from '../../components/CustomPagination'
+import ErrorFallback from '../../components/ErrorFallback'
+import ResponseSection from '../../components/ResponseSection'
+import ResponseSectionFallback from '../../components/ResponseSectionFallback'
+import SearchBar from '../../components/SearchBar'
+import useFetchData from '../../hooks/useFetchData'
 
 export default function Search() {
     const filterCategories = ['firstName', 'lastName', 'email', 'age', 'manufacturer', 'airlines', 'response']
@@ -88,8 +87,8 @@ export default function Search() {
                                 />
                             </Container>
                             <ErrorBoundary fallback={
-                                <ErrorFallback 
-                                    message={'Something went wrong. Please try again later.'} 
+                                <ErrorFallback
+                                    message={'Something went wrong. Please try again later.'}
                                     className='w-full h-[55dvh] my-[3dvh] flex justify-center items-center text-center rounded-xl bg-white font-bold'
                                 />
                             }>

@@ -1,5 +1,5 @@
-import { useState, useMemo, useCallback } from 'react';
 import axios from 'axios';
+import { useCallback, useMemo, useState } from 'react';
 
 // Wrapper to handle the async state for Suspense
 const promiseWrapper = (promise) => {
@@ -15,7 +15,7 @@ const promiseWrapper = (promise) => {
             result = err;
         }
     );
-    
+
     return {
         read() {
             if (status === "pending") throw suspender;
@@ -56,7 +56,7 @@ export default function useFetchData(url, params, baseURL) {
                 params: JSON.parse(stableParams), // Use stringified params
             })
             .then((res) => {
-                return res.data; // Directly return the data
+                setResource(res.data);
             })
             .catch((err) => {
                 setError(err); // Store error in state
@@ -65,7 +65,7 @@ export default function useFetchData(url, params, baseURL) {
 
         // Wrap the axios promise with a delay
         return promiseWrapper(fetchWithDelay(promise, 300)); // Delay 300ms before resolving the promise
-    }, [url, stableParams]);
+    }, [url, stableParams, baseURL]);
 
     // Trigger resource fetch if not already done
     const resourceWrapper = useMemo(() => {

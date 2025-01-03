@@ -1,11 +1,10 @@
+import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
-import { Container, PageItem, Pagination } from "react-bootstrap";
-import { useEffect, useState } from "react";
 import classNames from "classnames";
+import { useEffect, useState } from "react";
+import { Container, PageItem, Pagination } from "react-bootstrap";
 
-export default function CustomPagination({ className, resource, pagesPerView, onChange }) { 
-    const buttonStyling = "flex justify-center items-center h-1/4 aspect-square p-3 bg-blue-300 text-lg"
+export default function CustomPagination({ className, resource, pagesPerView, onChange }) {
     const [activePage, setActivePage] = useState(1)
 
     useEffect(() => {
@@ -59,40 +58,40 @@ export default function CustomPagination({ className, resource, pagesPerView, on
     return (
         <Pagination className={className}>
             <PageItem className="flex justify-center items-center text-center">
-                <FontAwesomeIcon 
-                    icon={faAngleLeft} 
+                <FontAwesomeIcon
+                    icon={faAngleLeft}
                     onClick={() => setActivePage(activePage - 1 >= 1 ? activePage - 1 : 1)}
-                    className="p-2 pb-1 text-center"/>
+                    className="p-2 pb-1 text-center" />
             </PageItem>
             <Container className="w-5/6 flex justify-evenly">
                 {calculateItems().map(
-                    (item) => 
-                    <button
-                        key={item}
-                        className={classNames(
-                            item === activePage ? 'font-bold' : '',
-                            'w-1/12 flex justify-center items-center'
-                        )}
-                        onClick={(event) => {
-                            if (typeof(item) !== 'string') {
-                                setActivePage(item)
-                            } else {
-                                const prev = Number(event.target.previousSibling.innerHTML)
-                                const next = Number(event.target.nextSibling.innerHTML)
-                                const middle = Math.floor((prev + next) / 2)
-                                setActivePage(middle)
-                            }
-                        }}
-                    >
-                        {typeof(item) === 'string' ? "..." : item}
-                    </button>
+                    (item) =>
+                        <button
+                            key={item}
+                            className={classNames(
+                                item === activePage ? 'font-bold' : '',
+                                'w-1/12 flex justify-center items-center'
+                            )}
+                            onClick={(event) => {
+                                if (typeof (item) !== 'string') {
+                                    setActivePage(item)
+                                } else {
+                                    const prev = Number(event.target.previousSibling.innerHTML)
+                                    const next = Number(event.target.nextSibling.innerHTML)
+                                    const middle = Math.floor((prev + next) / 2)
+                                    setActivePage(middle)
+                                }
+                            }}
+                        >
+                            {typeof (item) === 'string' ? "..." : item}
+                        </button>
                 )}
             </Container>
             <PageItem className="flex justify-center items-center">
-                <FontAwesomeIcon 
-                    icon={faAngleRight} 
+                <FontAwesomeIcon
+                    icon={faAngleRight}
                     onClick={() => setActivePage(activePage + 1 <= endPage ? activePage + 1 : endPage)}
-                    className="p-2 pb-1"/>
+                    className="p-2 pb-1" />
             </PageItem>
         </Pagination>
     )
