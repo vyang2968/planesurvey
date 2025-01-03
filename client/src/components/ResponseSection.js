@@ -41,7 +41,7 @@ export default function ResponseSection({ resource, className, pagesPerView }) {
                                         )}
                                     >
                                         <p className="line-clamp-3">
-                                            <strong>{key}:</strong>
+                                            <strong>{formattedKey}:</strong>
                                             {' '.concat(
                                                 typeof (value) === 'object'
                                                     ? Object.values(value).join(', ')
