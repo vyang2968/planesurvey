@@ -22,8 +22,9 @@ public class ResponseController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createResponse(@RequestBody Response response) {
+        System.out.println(response);
         boolean success = false;
-    
+
         try {
             success = service.createResponse(response);
         } catch (Exception e) {
@@ -45,7 +46,10 @@ public class ResponseController {
             @RequestParam String size,
             @RequestParam String direction) {
 
-        System.out.println(size);
+        System.out.println(
+                String.format(
+                        "Received args field: %s, value: %s, page: %s, size %s, direction: %s",
+                        field, value, page, size, direction));
 
         Pageable pageable = PageRequest
                 .of(Integer.parseInt(page), Integer.parseInt(size))

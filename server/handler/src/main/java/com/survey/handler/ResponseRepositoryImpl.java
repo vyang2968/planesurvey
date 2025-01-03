@@ -101,6 +101,11 @@ public class ResponseRepositoryImpl implements ResponseRepository {
                 Criteria.where(field).exists(true)).with(pageable);
 
         List<Response> list = template.find(query, Response.class);
+        list.forEach(
+                (response) -> {
+                    response.setEmail(obfuscateEmail(response.getEmail()));
+                    response.setLastName(obfuscateLastName(response.getLastName()));
+                });
 
         return PageableExecutionUtils.getPage(
                 list,
@@ -114,7 +119,7 @@ public class ResponseRepositoryImpl implements ResponseRepository {
         String domain = email.substring(symbolIndex, email.length() - 1);
         int randomLength = (int) (Math.random() * local.length());
 
-        String stars = "*".repeat(randomLength > 0 ? randomLength : MIN_STARS);
+        String stars = "*".repeat(randomLength > MIN_STARS ? randomLength : MIN_STARS);
 
         return email.substring(0, 1).concat(stars).concat(domain);
     }
