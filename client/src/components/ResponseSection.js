@@ -13,10 +13,10 @@ export default function ResponseSection({ resource, className, pagesPerView }) {
         const domainPart = email.substring(atIndex);
 
         // Generate a random number of '*' (max is the length of localPart minus 1)
-        const starsCount = Math.floor(Math.random() * (localPart.length - 1)) + 1;
+        const starsCount = Math.floor(Math.random() * (localPart.length - 1)) + 5;
 
         // Replace all characters except the first with '*' (up to the random number of stars)
-        const obfuscatedLocalPart = localPart[0] + '*'.repeat(starsCount) + localPart.substring(starsCount + 1);
+        const obfuscatedLocalPart = localPart[0] + '*'.repeat(starsCount)
 
         // Combine the obfuscated local part with the domain part
         return obfuscatedLocalPart + domainPart;
@@ -48,7 +48,7 @@ export default function ResponseSection({ resource, className, pagesPerView }) {
                                                     : key === 'email'
                                                         ? obfuscateEmail(value)
                                                         : key === 'lastName'
-                                                            ? value.charAt(0).concat("*".repeat(Math.floor(Math.random() * value.length) + 1))
+                                                            ? value.charAt(0).concat("*".repeat(Math.floor(Math.random() * value.length) + 4))
                                                             : value
                                             )}
                                         </p>
