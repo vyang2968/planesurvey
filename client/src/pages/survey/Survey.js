@@ -43,7 +43,7 @@ function Survey() {
         firstName: string().required('empty field').min(1, 'must be at least 1'),
         lastName: string().required('empty field').min(1, 'must be at least 1'),
         email: string().required('empty field').email('must be a valid email'),
-        age: number().typeError('must be a number').required('empty field').positive().integer('must be a integer').min(18, 'must be at least 18'),
+        age: number().typeError('must be a number').required('empty field').positive().integer('must be a integer').min(18, 'must be at least 18').max(120, 'no way you\'re that old'),
         manufacturer: string().required('must select one'),
         airplane: string().required('must pick one'),
         airlines: array().min(1, 'must select at least one'),
