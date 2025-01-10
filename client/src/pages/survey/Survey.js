@@ -15,7 +15,8 @@ import CustomModal from '../../components/ErrorModal';
 function Survey() {
     const planes = [
         { value: 'a220', label: 'A220' },
-        { value: 'a320', label: 'A230' },
+        { value: 'a320', label: 'A320' },
+        { value: 'a321', label: 'A321' },
         { value: 'a330', label: 'A330' },
         { value: 'a340', label: 'A340' },
         { value: 'a350', label: 'A350' },
