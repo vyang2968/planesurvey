@@ -59,11 +59,12 @@ public class ResponseRepositoryImpl implements ResponseRepository {
                                 .equals(Direction.ASC)
                                         ? Sorts.ascending(field)
                                         : Sorts.descending(field)),
-                Aggregates.skip(pageable.getPageNumber() * pageable.getPageSize()), // pagination
-                // function
+                Aggregates.skip(pageable.getPageNumber() * pageable.getPageSize()), // pagination function
                 Aggregates.limit(pageable.getPageSize())); // limit to only the desired page size
 
         AggregateIterable<Document> aggregateResults = collection.aggregate(searchPipeline);
+
+        // manually convert response to response object
         List<Response> responses = new ArrayList<>();
         aggregateResults.forEach(document -> {
             Response response = new Response(
@@ -79,6 +80,7 @@ public class ResponseRepositoryImpl implements ResponseRepository {
             responses.add(response);
         });
 
+        // count number of responses that fit the result
         List<Bson> countPipeline = Arrays.asList(
                 Aggregates.search(
                         SearchOperator.autocomplete(
@@ -96,6 +98,7 @@ public class ResponseRepositoryImpl implements ResponseRepository {
         return new PageImpl<Response>(responses, pageable, totalCount);
     }
 
+    @Override
     public Page<Response> getAllResponses(String field, Pageable pageable) {
         Query query = Query.query(
                 Criteria.where(field).exists(true)).with(pageable);
@@ -113,10 +116,15 @@ public class ResponseRepositoryImpl implements ResponseRepository {
                 () -> template.count(Query.query(Criteria.where(field).exists(true)), Response.class));
     }
 
+    /**
+     * Obfuscates an email by replacing the local part of the email with a random amount of stars
+     * @param email the email to be obfuscated
+     * @return obfuscated email
+     */
     private String obfuscateEmail(String email) {
         int symbolIndex = email.indexOf("@");
         String local = email.substring(0, symbolIndex);
-        String domain = email.substring(symbolIndex, email.length() - 1);
+        String domain = email.substring(symbolIndex, email.length());
         int randomLength = (int) (Math.random() * local.length());
 
         String stars = "*".repeat(randomLength > MIN_STARS ? randomLength : MIN_STARS);
@@ -124,6 +132,11 @@ public class ResponseRepositoryImpl implements ResponseRepository {
         return email.substring(0, 1).concat(stars).concat(domain);
     }
 
+    /**
+     * Obfuscates a last name with a random amount of stars
+     * @param lastName last name to be obfuscated
+     * @return obfuscated last name
+     */
     private String obfuscateLastName(String lastName) {
         String stars = "*".repeat(lastName.length() - 1);
         return lastName.substring(0, 1).concat(stars);
